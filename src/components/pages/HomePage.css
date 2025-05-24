@@ -1,0 +1,281 @@
+/* 🎨 HomePage样式 - 现代化主页设计 */
+
+.home-page {
+  width: 100%;
+  min-height: calc(100vh - 80px);
+}
+
+/* === 区域间距 === */
+.welcome-section,
+.quick-actions-section,
+.recent-rooms-section,
+.features-section {
+  margin-bottom: var(--spacing-5xl);
+}
+
+.features-section {
+  margin-bottom: 0;
+}
+
+/* === 区域标题 === */
+.section-title {
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-neutral-900);
+  margin-bottom: var(--spacing-2xl);
+  text-align: center;
+  position: relative;
+}
+
+.section-title::after {
+  content: '';
+  position: absolute;
+  bottom: calc(var(--spacing-md) * -1);
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 3px;
+  background: linear-gradient(90deg, var(--color-primary-500), var(--color-secondary-500));
+  border-radius: var(--radius-full);
+}
+
+/* === 操作卡片样式 === */
+.action-cards {
+  gap: var(--spacing-xl);
+}
+
+.action-card {
+  position: relative;
+  text-align: center;
+  transition: all var(--transition-base);
+}
+
+.action-card .card__header {
+  margin-bottom: var(--spacing-lg);
+  justify-content: center;
+}
+
+.action-card .card-icon {
+  width: 4rem;
+  height: 4rem;
+  font-size: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-full);
+  margin: 0 auto var(--spacing-lg);
+  transition: all var(--transition-base);
+}
+
+.action-card--primary .card-icon {
+  background: linear-gradient(135deg, var(--color-primary-100), var(--color-primary-200));
+  color: var(--color-primary-700);
+}
+
+.action-card--secondary .card-icon {
+  background: linear-gradient(135deg, var(--color-secondary-100), var(--color-secondary-200));
+  color: var(--color-secondary-700);
+}
+
+.action-card--accent .card-icon {
+  background: linear-gradient(135deg, var(--color-neutral-100), var(--color-neutral-200));
+  color: var(--color-neutral-700);
+}
+
+.action-card .card__title {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-neutral-900);
+  margin-bottom: var(--spacing-md);
+}
+
+.action-card .card-description {
+  font-size: var(--font-size-sm);
+  color: var(--color-neutral-600);
+  line-height: var(--line-height-relaxed);
+  margin-bottom: var(--spacing-lg);
+}
+
+/* 悬停效果增强 */
+.action-card:hover .card-icon {
+  transform: scale(1.1);
+  box-shadow: var(--shadow-lg);
+}
+
+.action-card--primary:hover .card-icon {
+  background: linear-gradient(135deg, var(--color-primary-200), var(--color-primary-300));
+  color: var(--color-primary-800);
+}
+
+.action-card--secondary:hover .card-icon {
+  background: linear-gradient(135deg, var(--color-secondary-200), var(--color-secondary-300));
+  color: var(--color-secondary-800);
+}
+
+.action-card--accent:hover .card-icon {
+  background: linear-gradient(135deg, var(--color-neutral-200), var(--color-neutral-300));
+  color: var(--color-neutral-800);
+}
+
+/* === 最近房间样式 === */
+.recent-rooms-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.room-card .room-name {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-neutral-900);
+  margin: 0 0 var(--spacing-xs) 0;
+}
+
+.room-card .room-details {
+  margin: 0;
+}
+
+/* === 功能特性样式 === */
+.feature-card {
+  text-align: center;
+  padding: var(--spacing-xl);
+  transition: all var(--transition-base);
+}
+
+.feature-card .feature-icon {
+  width: 3rem;
+  height: 3rem;
+  font-size: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-lg);
+  margin: 0 auto var(--spacing-lg);
+  background: linear-gradient(135deg, var(--color-primary-50), var(--color-secondary-50));
+  color: var(--color-primary-600);
+  transition: all var(--transition-base);
+}
+
+.feature-card .feature-title {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-neutral-900);
+  margin: 0 0 var(--spacing-md) 0;
+}
+
+.feature-card .feature-description {
+  font-size: var(--font-size-sm);
+  color: var(--color-neutral-600);
+  line-height: var(--line-height-relaxed);
+  margin: 0;
+}
+
+.feature-card:hover .feature-icon {
+  transform: scale(1.1);
+  background: linear-gradient(135deg, var(--color-primary-100), var(--color-secondary-100));
+  color: var(--color-primary-700);
+  box-shadow: var(--shadow-md);
+}
+
+/* === 响应式设计 === */
+@media (max-width: 1024px) {
+  .action-cards.grid--cols-3 {
+    grid-template-columns: 1fr;
+    max-width: 500px;
+    margin: 0 auto;
+  }
+  
+  .features-grid.grid--cols-4 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .welcome-section,
+  .quick-actions-section,
+  .recent-rooms-section,
+  .features-section {
+    margin-bottom: var(--spacing-4xl);
+  }
+  
+  .section-title {
+    font-size: var(--font-size-xl);
+    margin-bottom: var(--spacing-xl);
+  }
+  
+  .action-card .card-icon {
+    width: 3rem;
+    height: 3rem;
+    font-size: 1.5rem;
+  }
+  
+  .feature-card {
+    padding: var(--spacing-lg);
+  }
+  
+  .features-grid.grid--cols-4 {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .home-page {
+    min-height: calc(100vh - 60px);
+  }
+  
+  .section-title {
+    font-size: var(--font-size-lg);
+    margin-bottom: var(--spacing-lg);
+  }
+  
+  .action-card .card__title {
+    font-size: var(--font-size-base);
+  }
+  
+  .action-card .card-description,
+  .feature-card .feature-description {
+    font-size: var(--font-size-xs);
+  }
+  
+  .action-card .card-icon {
+    width: 2.5rem;
+    height: 2.5rem;
+    font-size: 1.25rem;
+    margin-bottom: var(--spacing-md);
+  }
+  
+  .feature-card .feature-icon {
+    width: 2.5rem;
+    height: 2.5rem;
+    font-size: 1.25rem;
+  }
+}
+
+/* === 无障碍增强 === */
+@media (prefers-reduced-motion: reduce) {
+  .action-card .card-icon,
+  .feature-card .feature-icon {
+    transition: none;
+  }
+  
+  .action-card:hover .card-icon,
+  .feature-card:hover .feature-icon {
+    transform: none;
+  }
+}
+
+/* === 打印样式 === */
+@media print {
+  .action-cards,
+  .recent-rooms-section {
+    display: none;
+  }
+  
+  .features-section {
+    page-break-inside: avoid;
+  }
+  
+  .feature-card {
+    page-break-inside: avoid;
+  }
+} 

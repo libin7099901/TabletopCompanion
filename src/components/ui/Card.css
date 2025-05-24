@@ -1,0 +1,229 @@
+/* 🎨 Card组件样式 - 现代化卡片设计系统 */
+
+.card {
+  /* 基础样式 */
+  display: block;
+  border-radius: var(--radius-lg);
+  transition: all var(--transition-base);
+  position: relative;
+  overflow: hidden;
+  
+  /* 字体继承 */
+  font-family: inherit;
+  font-size: inherit;
+  
+  /* 重置按钮样式（当用作按钮时） */
+  border: none;
+  text-align: left;
+  cursor: default;
+  background: none;
+}
+
+/* === 卡片变体 === */
+
+/* 默认卡片 */
+.card--default {
+  background: white;
+  border: 1px solid var(--color-neutral-200);
+  box-shadow: var(--shadow-sm);
+}
+
+/* 悬浮卡片 */
+.card--elevated {
+  background: white;
+  border: 1px solid var(--color-neutral-100);
+  box-shadow: var(--shadow-lg);
+}
+
+/* 轮廓卡片 */
+.card--outlined {
+  background: white;
+  border: 2px solid var(--color-neutral-200);
+  box-shadow: none;
+}
+
+/* 幽灵卡片 */
+.card--ghost {
+  background: var(--color-neutral-50);
+  border: 1px solid transparent;
+  box-shadow: none;
+}
+
+/* === 内边距变体 === */
+.card--padding-none {
+  padding: 0;
+}
+
+.card--padding-sm {
+  padding: var(--spacing-lg);
+}
+
+.card--padding-md {
+  padding: var(--spacing-xl);
+}
+
+.card--padding-lg {
+  padding: var(--spacing-2xl);
+}
+
+.card--padding-xl {
+  padding: var(--spacing-3xl);
+}
+
+/* === 交互状态 === */
+
+/* 可悬停卡片 */
+.card--hoverable:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-xl);
+}
+
+.card--hoverable.card--default:hover {
+  border-color: var(--color-neutral-300);
+}
+
+.card--hoverable.card--outlined:hover {
+  border-color: var(--color-primary-300);
+}
+
+.card--hoverable.card--ghost:hover {
+  background: white;
+  border-color: var(--color-neutral-200);
+  box-shadow: var(--shadow-md);
+}
+
+/* 可点击卡片 */
+.card--clickable {
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.card--clickable:hover {
+  transform: translateY(-1px);
+}
+
+.card--clickable:active {
+  transform: translateY(0);
+  transition: transform var(--transition-fast);
+}
+
+.card--clickable:focus-visible {
+  outline: 2px solid var(--color-primary-500);
+  outline-offset: 2px;
+}
+
+/* 同时具有悬停和点击效果 */
+.card--hoverable.card--clickable:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-2xl);
+}
+
+.card--hoverable.card--clickable:active {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-lg);
+}
+
+/* === 响应式设计 === */
+@media (max-width: 640px) {
+  .card--padding-lg {
+    padding: var(--spacing-xl);
+  }
+  
+  .card--padding-xl {
+    padding: var(--spacing-2xl);
+  }
+  
+  .card--hoverable:hover,
+  .card--clickable:hover,
+  .card--hoverable.card--clickable:hover {
+    transform: none;
+    box-shadow: var(--shadow-md);
+  }
+}
+
+/* === 无障碍设计 === */
+@media (prefers-reduced-motion: reduce) {
+  .card {
+    transition: none;
+  }
+  
+  .card--hoverable:hover,
+  .card--clickable:hover,
+  .card--hoverable.card--clickable:hover {
+    transform: none;
+  }
+  
+  .card--clickable:active,
+  .card--hoverable.card--clickable:active {
+    transform: none;
+  }
+}
+
+/* === 卡片内容布局助手 === */
+.card__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--spacing-lg);
+}
+
+.card__title {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-neutral-900);
+  margin: 0;
+}
+
+.card__subtitle {
+  font-size: var(--font-size-sm);
+  color: var(--color-neutral-600);
+  margin: var(--spacing-xs) 0 0 0;
+}
+
+.card__content {
+  color: var(--color-neutral-700);
+  line-height: var(--line-height-relaxed);
+}
+
+.card__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: var(--spacing-lg);
+  padding-top: var(--spacing-lg);
+  border-top: 1px solid var(--color-neutral-200);
+}
+
+.card__actions {
+  display: flex;
+  gap: var(--spacing-sm);
+  margin-left: auto;
+}
+
+/* === 特殊卡片样式 === */
+
+/* 渐变边框卡片 */
+.card--gradient-border {
+  background: linear-gradient(white, white) padding-box,
+              linear-gradient(135deg, var(--color-primary-500), var(--color-secondary-500)) border-box;
+  border: 2px solid transparent;
+}
+
+.card--gradient-border:hover {
+  background: linear-gradient(var(--color-neutral-50), var(--color-neutral-50)) padding-box,
+              linear-gradient(135deg, var(--color-primary-600), var(--color-secondary-600)) border-box;
+}
+
+/* 阴影强调卡片 */
+.card--emphasized {
+  background: linear-gradient(135deg, var(--color-primary-50), var(--color-secondary-50));
+  border: 1px solid var(--color-primary-200);
+  box-shadow: var(--shadow-lg);
+}
+
+.card--emphasized:hover {
+  background: linear-gradient(135deg, var(--color-primary-100), var(--color-secondary-100));
+  border-color: var(--color-primary-300);
+  box-shadow: var(--shadow-xl);
+} 

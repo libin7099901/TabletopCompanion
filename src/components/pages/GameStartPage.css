@@ -1,0 +1,356 @@
+/* 🎨 GameStartPage样式 - 现代化游戏启动界面 */
+
+.game-start-page {
+  width: 100%;
+  min-height: calc(100vh - 80px);
+}
+
+/* === 游戏模式选择 === */
+.game-modes {
+  margin-bottom: var(--spacing-3xl);
+}
+
+.game-mode-card {
+  text-align: center;
+  padding: var(--spacing-2xl);
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.mode-icon {
+  width: 5rem;
+  height: 5rem;
+  font-size: 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-full);
+  margin: 0 auto var(--spacing-xl);
+  transition: all var(--transition-base);
+}
+
+.game-mode-card--create .mode-icon {
+  background: linear-gradient(135deg, var(--color-primary-100), var(--color-primary-200));
+  color: var(--color-primary-700);
+}
+
+.game-mode-card--join .mode-icon {
+  background: linear-gradient(135deg, var(--color-secondary-100), var(--color-secondary-200));
+  color: var(--color-secondary-700);
+}
+
+.game-mode-card--demo .mode-icon {
+  background: linear-gradient(135deg, var(--color-success-500), #22c55e);
+  color: white;
+}
+
+.mode-title {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-neutral-900);
+  margin: 0 0 var(--spacing-md) 0;
+}
+
+.mode-description {
+  font-size: var(--font-size-sm);
+  color: var(--color-neutral-600);
+  line-height: var(--line-height-relaxed);
+  margin-bottom: var(--spacing-lg);
+  flex: 1;
+}
+
+.mode-features {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.mode-features li {
+  font-size: var(--font-size-sm);
+  color: var(--color-neutral-700);
+  padding: var(--spacing-xs) 0;
+  border-top: 1px solid var(--color-neutral-100);
+}
+
+.mode-features li:first-child {
+  border-top: none;
+}
+
+/* 悬停效果 */
+.game-mode-card:hover .mode-icon {
+  transform: scale(1.1);
+  box-shadow: var(--shadow-lg);
+}
+
+.game-mode-card--create:hover .mode-icon {
+  background: linear-gradient(135deg, var(--color-primary-200), var(--color-primary-300));
+  color: var(--color-primary-800);
+}
+
+.game-mode-card--join:hover .mode-icon {
+  background: linear-gradient(135deg, var(--color-secondary-200), var(--color-secondary-300));
+  color: var(--color-secondary-800);
+}
+
+.game-mode-card--demo:hover .mode-icon {
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+}
+
+/* === 表单容器 === */
+.form-container {
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.create-room-form,
+.join-room-form,
+.demo-card {
+  width: 100%;
+}
+
+/* === 表单元素 === */
+.form-group {
+  margin-bottom: var(--spacing-xl);
+}
+
+.form-label {
+  display: block;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-neutral-800);
+  margin-bottom: var(--spacing-sm);
+}
+
+.form-input,
+.form-select {
+  width: 100%;
+  padding: var(--spacing-md) var(--spacing-lg);
+  border: 1px solid var(--color-neutral-300);
+  border-radius: var(--radius-base);
+  font-size: var(--font-size-base);
+  color: var(--color-neutral-800);
+  background: white;
+  transition: all var(--transition-fast);
+}
+
+.form-input:focus,
+.form-select:focus {
+  outline: none;
+  border-color: var(--color-primary-500);
+  box-shadow: 0 0 0 3px var(--color-primary-100);
+}
+
+.room-id-input {
+  text-align: center;
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+/* === 复选框样式 === */
+.form-checkbox-label {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  font-size: var(--font-size-base);
+  color: var(--color-neutral-800);
+}
+
+.form-checkbox {
+  width: 1.25rem;
+  height: 1.25rem;
+  margin-right: var(--spacing-md);
+  accent-color: var(--color-primary-500);
+}
+
+.checkbox-text {
+  font-weight: var(--font-weight-medium);
+}
+
+.form-help {
+  font-size: var(--font-size-xs);
+  color: var(--color-neutral-500);
+  margin: var(--spacing-sm) 0 0 0;
+}
+
+/* === 表单操作区域 === */
+.form-actions {
+  display: flex;
+  gap: var(--spacing-md);
+  margin-top: var(--spacing-2xl);
+}
+
+.form-actions button {
+  flex: 1;
+}
+
+/* === 加入房间插图 === */
+.join-illustration {
+  text-align: center;
+  margin-bottom: var(--spacing-2xl);
+}
+
+.join-icon {
+  width: 4rem;
+  height: 4rem;
+  font-size: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-full);
+  background: linear-gradient(135deg, var(--color-secondary-100), var(--color-secondary-200));
+  color: var(--color-secondary-700);
+  margin: 0 auto var(--spacing-lg);
+}
+
+.join-illustration p {
+  font-size: var(--font-size-sm);
+  color: var(--color-neutral-600);
+  margin: 0;
+}
+
+/* === 演示模式插图 === */
+.demo-container {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.demo-illustration {
+  text-align: center;
+  margin-bottom: var(--spacing-2xl);
+}
+
+.demo-icon {
+  width: 5rem;
+  height: 5rem;
+  font-size: 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-full);
+  background: linear-gradient(135deg, var(--color-success-500), #22c55e);
+  color: white;
+  margin: 0 auto var(--spacing-lg);
+}
+
+.demo-illustration h3 {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-neutral-900);
+  margin: 0 0 var(--spacing-md) 0;
+}
+
+.demo-illustration p {
+  font-size: var(--font-size-base);
+  color: var(--color-neutral-600);
+  line-height: var(--line-height-relaxed);
+  margin: 0;
+}
+
+.demo-features {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-2xl);
+}
+
+.feature-item {
+  display: flex;
+  align-items: center;
+  padding: var(--spacing-md);
+  background: var(--color-neutral-50);
+  border-radius: var(--radius-base);
+  font-size: var(--font-size-sm);
+  color: var(--color-neutral-700);
+}
+
+.feature-icon {
+  font-size: 1.25rem;
+  margin-right: var(--spacing-md);
+}
+
+/* === 响应式设计 === */
+@media (max-width: 1024px) {
+  .game-modes .grid--cols-3 {
+    grid-template-columns: 1fr;
+    max-width: 400px;
+    margin: 0 auto;
+  }
+}
+
+@media (max-width: 768px) {
+  .game-mode-card {
+    padding: var(--spacing-xl);
+  }
+  
+  .mode-icon {
+    width: 4rem;
+    height: 4rem;
+    font-size: 2rem;
+  }
+  
+  .form-container {
+    max-width: 100%;
+  }
+  
+  .demo-container {
+    max-width: 100%;
+  }
+  
+  .demo-features {
+    gap: var(--spacing-sm);
+  }
+  
+  .feature-item {
+    font-size: var(--font-size-xs);
+    padding: var(--spacing-sm);
+  }
+}
+
+@media (max-width: 640px) {
+  .form-actions {
+    flex-direction: column;
+  }
+  
+  .mode-icon {
+    width: 3rem;
+    height: 3rem;
+    font-size: 1.5rem;
+  }
+  
+  .join-icon,
+  .demo-icon {
+    width: 3rem;
+    height: 3rem;
+    font-size: 1.5rem;
+  }
+}
+
+/* === 无障碍增强 === */
+@media (prefers-reduced-motion: reduce) {
+  .mode-icon,
+  .join-icon,
+  .demo-icon {
+    transition: none;
+  }
+  
+  .game-mode-card:hover .mode-icon {
+    transform: none;
+  }
+}
+
+/* === 高对比度模式 === */
+@media (prefers-contrast: high) {
+  .form-input,
+  .form-select {
+    border-color: #000;
+  }
+  
+  .form-input:focus,
+  .form-select:focus {
+    border-color: #000;
+    box-shadow: 0 0 0 2px #000;
+  }
+} 

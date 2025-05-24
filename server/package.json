@@ -1,0 +1,30 @@
+{
+  "name": "tabletop-signaling-server",
+  "version": "1.0.0",
+  "description": "WebSocket信令服务器，用于桌游伴侣WebRTC连接协调",
+  "main": "signaling-server.js",
+  "scripts": {
+    "start": "node signaling-server.js",
+    "dev": "nodemon signaling-server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "websocket",
+    "webrtc",
+    "signaling",
+    "tabletop",
+    "game"
+  ],
+  "author": "桌游伴侣开发团队",
+  "license": "MIT",
+  "dependencies": {
+    "ws": "^8.14.2",
+    "uuid": "^9.0.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.2"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  }
+} 
