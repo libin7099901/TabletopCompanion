@@ -1,71 +1,281 @@
+/* 🎨 基础样式重置 - 现代化桌游应用 */
+
+/* 基础重置和字体配置 */
 :root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
-
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
+  /* 现代化字体栈 */
+  --font-family-primary: 'Inter Variable', 'Inter', 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-family-mono: 'JetBrains Mono Variable', 'JetBrains Mono', 'SF Mono', 'Fira Code', 'Consolas', 'Courier New', monospace;
+  
+  /* 字体特性设置 */
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
 }
 
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
+/* 全局重置 */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
-a:hover {
-  color: #535bf2;
+
+html {
+  /* 基础字体大小 - 会被design-tokens.css中的媒体查询覆盖 */
+  font-size: 16px; /* 保持此基准，rem单位将基于此 */
+  line-height: var(--line-height-normal); /* 全局默认行高 */
+  -webkit-tap-highlight-color: transparent; /* 移除移动端点击高光 */
+  
+  /* 现代化滚动行为 */
+  scroll-behavior: smooth;
+  scroll-padding-top: 2rem;
+  
+  /* 字体渲染优化 */
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  
+  /* 防止水平滚动 */
+  overflow-x: hidden;
 }
 
 body {
-  margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
+  /* 字体配置 */
+  font-family: var(--font-family-sans); /* 使用tokens中的sans字体 */
+  font-size: var(--font-size-base); /* 使用tokens中的基础字号 */
+  line-height: var(--line-height-relaxed); /* 更宽松的行高以提高可读性 */
+  
+  /* 字体特性 */
+  font-feature-settings: 'cv03', 'cv04', 'cv11', 'ss01', 'ss02';
+  font-variant-numeric: tabular-nums;
+  
+  /* 基础颜色 */
+  color: var(--color-neutral-800); /* 使用tokens中的深灰色作为文本主色 */
+  background-color: var(--color-neutral-50); /* 使用tokens中的浅灰色作为默认背景 */
+  
+  /* 布局 */
   min-height: 100vh;
+  width: 100%;
+  
+  /* 防止水平滚动 */
+  overflow-x: hidden;
 }
 
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
+/* 链接样式 */
+a {
+  color: var(--color-primary-600); /* 使用品牌主色 */
+  text-decoration: none;
+  transition: 
+    color var(--duration-150) var(--ease-out),
+    text-decoration-color var(--duration-150) var(--ease-out);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
 }
 
+a:hover {
+  color: var(--color-primary-700); /* 悬停时颜色加深 */
+  text-decoration: underline;
+  text-decoration-color: var(--color-primary-400); /* 下划线颜色可以略浅 */
+}
+
+a:focus-visible {
+  outline: 2px solid var(--color-primary-300);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm); /* 给焦点轮廓一点圆角 */
+}
+
+/* 按钮基础样式 */
 button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
   font-family: inherit;
-  background-color: #1a1a1a;
-  color: white;
+  font-size: inherit;
+  line-height: inherit;
+  margin: 0;
   cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+  border: none;
+  background: transparent;
+  color: inherit;
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
+/* 表单元素基础样式 */
+input,
+select,
+textarea {
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+  margin: 0;
+  color: inherit;
+}
+
+/* 图片和媒体 */
+img,
+video,
+canvas,
+svg {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+svg {
+  fill: currentColor;
+}
+
+/* 表格 */
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+/* 列表 */
+ul,
+ol {
+  list-style: none;
+}
+
+/* 标题 */
+h1, .h1 {
+  font-size: var(--font-size-4xl);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--line-height-tight);
+  margin-bottom: var(--spacing-lg);
+  color: var(--color-neutral-900);
+}
+
+h2, .h2 {
+  font-size: var(--font-size-3xl);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--line-height-tight);
+  margin-bottom: var(--spacing-md);
+  color: var(--color-neutral-900);
+}
+
+h3, .h3 {
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-snug);
+  margin-bottom: var(--spacing-sm);
+  color: var(--color-neutral-800);
+}
+
+h4, .h4 {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-snug);
+  margin-bottom: var(--spacing-xs);
+  color: var(--color-neutral-800);
+}
+
+h5, .h5 {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-medium);
+  line-height: var(--line-height-normal);
+  margin-bottom: var(--spacing-xs);
+  color: var(--color-neutral-700);
+}
+
+h6, .h6 {
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-medium);
+  line-height: var(--line-height-normal);
+  text-transform: uppercase; /* 六级标题通常用作小节提示 */
+  letter-spacing: 0.05em;
+  color: var(--color-neutral-600);
+  margin-bottom: var(--spacing-xs);
+}
+
+/* 段落 */
+p {
+  margin-bottom: var(--spacing-md); /* 段落间增加默认间距 */
+  line-height: var(--line-height-relaxed); /* 确保段落行高一致 */
+}
+
+/* 强调文本 */
+strong, b {
+  font-weight: 600;
+}
+
+em, i {
+  font-style: italic;
+}
+
+/* 代码 */
+code,
+pre,
+kbd,
+samp {
+  font-family: var(--font-family-mono);
+  font-size: 0.9em;
+}
+
+/* 选择文本 */
+::selection {
+  background-color: rgba(var(--color-primary-500-rgb), 0.25); /* 使用主色的半透明背景 */
+  color: var(--color-primary-800); /* 选中文字颜色可以更深一些 */
+}
+
+/* 焦点样式 */
+:focus {
+  outline: none; /* 通常自定义 :focus-visible */
+}
+
+/* 全局 :focus-visible 样式，用于键盘导航 */
+/* 之前的 .btn:focus-visible 和 a:focus-visible 会覆盖这个，除非它们没有定义 */
+:focus-visible {
+  outline: 2px solid var(--color-primary-500); /* 使用品牌主色 */
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+/* 减少动画偏好响应 */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
-  a:hover {
-    color: #747bff;
+}
+
+/* 深色模式基础适配 */
+@media (prefers-color-scheme: dark) {
+  html {
+    color-scheme: dark;
   }
-  button {
-    background-color: #f9f9f9;
-    color: #213547;
+}
+
+/* 打印样式 */
+@media print {
+  *,
+  *::before,
+  *::after {
+    background: transparent !important;
+    color: black !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+  }
+  
+  body {
+    font-size: 12pt;
+    line-height: 1.3;
+  }
+  
+  h1, h2, h3 {
+    page-break-after: avoid;
+  }
+  
+  p, h2, h3 {
+    orphans: 3;
+    widows: 3;
+  }
+  
+  @page {
+    margin: 2cm;
   }
 } 

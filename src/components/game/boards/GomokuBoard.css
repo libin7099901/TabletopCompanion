@@ -1,0 +1,164 @@
+/* ♟️ 五子棋棋盘样式 */
+
+.gomoku-board-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-lg);
+  padding: var(--spacing-lg);
+}
+
+.game-status {
+  display: flex;
+  gap: var(--spacing-lg);
+  align-items: center;
+  padding: var(--spacing-md);
+  background: white;
+  border-radius: var(--radius-base);
+  box-shadow: var(--shadow-sm);
+}
+
+.turn-info {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-primary-700);
+}
+
+.round-info {
+  font-size: var(--font-size-sm);
+  color: var(--color-neutral-600);
+}
+
+/* === 棋盘样式 === */
+.gomoku-board {
+  display: grid;
+  grid-template-rows: repeat(15, 1fr);
+  gap: 1px;
+  background: #8B4513;
+  border: 2px solid #654321;
+  border-radius: var(--radius-sm);
+  padding: var(--spacing-sm);
+  box-shadow: var(--shadow-lg);
+}
+
+.board-row {
+  display: grid;
+  grid-template-columns: repeat(15, 1fr);
+  gap: 1px;
+}
+
+.gomoku-cell {
+  width: 24px;
+  height: 24px;
+  background: #DEB887;
+  border: 1px solid #8B4513;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.gomoku-cell:hover.clickable {
+  background: #F5DEB3;
+  box-shadow: inset 0 0 0 2px var(--color-primary-400);
+}
+
+.gomoku-cell.has-piece {
+  cursor: not-allowed;
+}
+
+/* === 棋子样式 === */
+.piece {
+  width: 20px;
+  height: 20px;
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  font-weight: bold;
+  box-shadow: var(--shadow-sm);
+  animation: placePiece 0.3s ease-out;
+}
+
+.piece.my-piece {
+  background: #2D3748;
+  color: white;
+  border: 2px solid #1A202C;
+}
+
+.piece.opponent-piece {
+  background: #F7FAFC;
+  color: #2D3748;
+  border: 2px solid #E2E8F0;
+}
+
+/* === 游戏信息 === */
+.game-info {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  min-width: 200px;
+}
+
+.players-score {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.player-score {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--spacing-sm);
+  background: var(--color-neutral-100);
+  border-radius: var(--radius-sm);
+}
+
+.player-name {
+  font-weight: var(--font-weight-medium);
+  color: var(--color-neutral-800);
+}
+
+.score {
+  font-weight: var(--font-weight-bold);
+  color: var(--color-primary-600);
+}
+
+/* === 动画 === */
+@keyframes placePiece {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* === 响应式设计 === */
+@media (max-width: 768px) {
+  .gomoku-board {
+    max-width: 90vw;
+  }
+  
+  .gomoku-cell {
+    width: 20px;
+    height: 20px;
+  }
+  
+  .piece {
+    width: 16px;
+    height: 16px;
+    font-size: 14px;
+  }
+  
+  .game-status {
+    flex-direction: column;
+    text-align: center;
+  }
+} 

@@ -1,0 +1,449 @@
+/* 🎯 AI游戏大师组件样式 - 4K优化 */
+
+.ai-game-master {
+  position: fixed;
+  top: clamp(var(--spacing-lg), 2vw, var(--spacing-2xl));
+  right: clamp(var(--spacing-lg), 2vw, var(--spacing-2xl));
+  z-index: var(--z-fixed);
+  
+  /* 响应式宽度 */
+  width: clamp(280px, 22vw, 380px);
+  max-width: 90vw;
+  
+  /* 动画过渡 */
+  transition: var(--transition-all);
+}
+
+.ai-game-master--minimized {
+  width: auto;
+}
+
+/* AI大师卡片 */
+.ai-master-card {
+  /* 增强玻璃态效果 */
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(30px);
+  border: 1px solid rgba(99, 102, 241, 0.2);
+  box-shadow: 
+    var(--shadow-xl),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3),
+    0 0 0 1px rgba(99, 102, 241, 0.1);
+  
+  /* 渐变边框效果 */
+  position: relative;
+  overflow: hidden;
+}
+
+.ai-master-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, 
+    var(--color-primary-500) 0%, 
+    var(--color-secondary-500) 50%,
+    var(--color-primary-500) 100%
+  );
+  opacity: 0.8;
+}
+
+/* AI大师头部 */
+.ai-master-header {
+  display: flex;
+  align-items: center;
+  gap: clamp(var(--spacing-sm), 1vw, var(--spacing-md));
+  margin-bottom: clamp(var(--spacing-md), 1.5vw, var(--spacing-lg));
+  position: relative;
+}
+
+.ai-master-avatar {
+  position: relative;
+  width: clamp(40px, 5vw, 56px);
+  height: clamp(40px, 5vw, 56px);
+  border-radius: 50%;
+  background: linear-gradient(135deg, 
+    var(--color-primary-500) 0%, 
+    var(--color-secondary-500) 100%
+  );
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow-md);
+  flex-shrink: 0;
+}
+
+.ai-avatar-icon {
+  font-size: clamp(var(--font-size-lg), 2vw, var(--font-size-2xl));
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.1));
+}
+
+.ai-status-indicator {
+  position: absolute;
+  bottom: -2px;
+  right: -2px;
+  width: clamp(12px, 1.5vw, 16px);
+  height: clamp(12px, 1.5vw, 16px);
+  background: var(--color-success-500);
+  border: 2px solid var(--color-neutral-0);
+  border-radius: 50%;
+  animation: pulse 2s infinite;
+}
+
+.ai-master-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.ai-master-title {
+  margin: 0 0 var(--spacing-xs) 0;
+  font-size: clamp(var(--font-size-base), 1.2vw, var(--font-size-lg));
+  font-weight: var(--font-weight-bold);
+  color: var(--color-neutral-800);
+  line-height: var(--line-height-tight);
+}
+
+.ai-master-subtitle {
+  margin: 0;
+  font-size: clamp(var(--font-size-xs), 0.9vw, var(--font-size-sm));
+  color: var(--color-neutral-600);
+  line-height: var(--line-height-relaxed);
+}
+
+.ai-master-controls {
+  display: flex;
+  gap: var(--spacing-xs);
+}
+
+.ai-control-btn {
+  min-width: clamp(24px, 2vw, 32px);
+  min-height: clamp(24px, 2vw, 32px);
+  padding: 0;
+  border-radius: var(--radius-lg);
+  transition: var(--transition-all);
+}
+
+/* AI提示内容 */
+.ai-master-content {
+  margin-bottom: clamp(var(--spacing-md), 1.5vw, var(--spacing-lg));
+  animation: slideInUp var(--duration-300) var(--ease-out);
+}
+
+.ai-hint {
+  display: flex;
+  align-items: flex-start;
+  gap: clamp(var(--spacing-sm), 1vw, var(--spacing-md));
+  padding: clamp(var(--spacing-sm), 1vw, var(--spacing-md));
+  border-radius: var(--radius-lg);
+  border-left: 4px solid;
+  transition: var(--transition-all);
+  position: relative;
+  overflow: hidden;
+}
+
+.ai-hint::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(90deg, 
+    transparent 0%, 
+    rgba(255, 255, 255, 0.1) 50%,
+    transparent 100%
+  );
+  transform: translateX(-100%);
+  transition: transform var(--duration-500) var(--ease-out);
+}
+
+.ai-hint:hover::before {
+  transform: translateX(100%);
+}
+
+.ai-hint-icon {
+  font-size: clamp(var(--font-size-base), 1.2vw, var(--font-size-lg));
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.ai-hint-message {
+  flex: 1;
+  font-size: clamp(var(--font-size-sm), 1vw, var(--font-size-base));
+  font-weight: var(--font-weight-medium);
+  line-height: var(--line-height-relaxed);
+}
+
+/* 提示变体 */
+.ai-hint--error {
+  background: var(--color-error-50);
+  border-left-color: var(--color-error-500);
+  color: var(--color-error-800);
+}
+
+.ai-hint--warning {
+  background: var(--color-warning-50);
+  border-left-color: var(--color-warning-500);
+  color: var(--color-warning-800);
+}
+
+.ai-hint--info {
+  background: var(--color-info-50);
+  border-left-color: var(--color-info-500);
+  color: var(--color-info-800);
+}
+
+/* 游戏状态总览 */
+.ai-master-status {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(60px, 1fr));
+  gap: clamp(var(--spacing-xs), 0.8vw, var(--spacing-sm));
+  margin-bottom: clamp(var(--spacing-md), 1.5vw, var(--spacing-lg));
+  padding: clamp(var(--spacing-sm), 1vw, var(--spacing-md));
+  background: var(--color-neutral-50);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-neutral-200);
+}
+
+.game-status-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.status-label {
+  font-size: clamp(var(--font-size-xs), 0.8vw, var(--font-size-sm));
+  color: var(--color-neutral-600);
+  margin-bottom: var(--spacing-xs);
+  line-height: var(--line-height-tight);
+}
+
+.status-value {
+  font-size: clamp(var(--font-size-sm), 1vw, var(--font-size-base));
+  font-weight: var(--font-weight-bold);
+  color: var(--color-primary-600);
+  line-height: var(--line-height-tight);
+}
+
+/* 快捷操作 */
+.ai-master-actions {
+  display: flex;
+  gap: clamp(var(--spacing-xs), 0.8vw, var(--spacing-sm));
+}
+
+.ai-action-btn {
+  flex: 1;
+  font-size: clamp(var(--font-size-xs), 0.9vw, var(--font-size-sm));
+  padding: clamp(var(--spacing-xs), 0.8vw, var(--spacing-sm)) clamp(var(--spacing-sm), 1vw, var(--spacing-md));
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* 最小化状态 */
+.ai-master-toggle {
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  animation: float 3s ease-in-out infinite;
+  font-size: clamp(var(--font-size-sm), 1vw, var(--font-size-base));
+  padding: clamp(var(--spacing-sm), 1vw, var(--spacing-md)) clamp(var(--spacing-md), 1.5vw, var(--spacing-lg));
+}
+
+.ai-master-toggle:hover {
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: var(--shadow-xl);
+}
+
+/* 优雅动画 */
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.7;
+    transform: scale(1.1);
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+/* 4K显示器优化 */
+@media (min-width: 3440px) {
+  .ai-game-master {
+    top: var(--spacing-3xl);
+    right: var(--spacing-3xl);
+    width: clamp(350px, 25vw, 450px);
+  }
+  
+  .ai-master-card {
+    border-radius: var(--radius-2xl);
+  }
+  
+  .ai-master-avatar {
+    width: 64px;
+    height: 64px;
+  }
+  
+  .ai-status-indicator {
+    width: 18px;
+    height: 18px;
+  }
+}
+
+/* 平板设备优化 */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .ai-game-master {
+    top: var(--spacing-lg);
+    right: var(--spacing-lg);
+    width: clamp(260px, 30vw, 320px);
+  }
+  
+  .ai-master-status {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .ai-master-actions {
+    flex-direction: column;
+  }
+}
+
+/* 移动设备优化 */
+@media (max-width: 767px) {
+  .ai-game-master {
+    top: var(--spacing-md);
+    right: var(--spacing-md);
+    left: var(--spacing-md);
+    width: auto;
+    max-width: none;
+  }
+  
+  .ai-master-header {
+    margin-bottom: var(--spacing-md);
+  }
+  
+  .ai-master-avatar {
+    width: 40px;
+    height: 40px;
+  }
+  
+  .ai-status-indicator {
+    width: 12px;
+    height: 12px;
+  }
+  
+  .ai-master-status {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  
+  .ai-master-actions {
+    flex-direction: column;
+    gap: var(--spacing-xs);
+  }
+  
+  .ai-action-btn {
+    font-size: var(--font-size-xs);
+    padding: var(--spacing-xs) var(--spacing-sm);
+  }
+  
+  /* 移动端的最小化按钮 */
+  .ai-master-toggle {
+    font-size: var(--font-size-sm);
+    padding: var(--spacing-sm) var(--spacing-md);
+  }
+}
+
+/* 小屏设备特殊优化 */
+@media (max-width: 480px) {
+  .ai-game-master {
+    top: var(--spacing-sm);
+    right: var(--spacing-sm);
+    left: var(--spacing-sm);
+  }
+  
+  .ai-master-status {
+    grid-template-columns: 1fr 1fr;
+    gap: var(--spacing-xs);
+  }
+  
+  .game-status-item:last-child {
+    grid-column: 1 / -1;
+  }
+}
+
+/* 高对比度支持 */
+@media (prefers-contrast: high) {
+  .ai-master-card {
+    background: var(--color-neutral-0);
+    border: 2px solid var(--color-neutral-900);
+  }
+  
+  .ai-master-avatar {
+    background: var(--color-neutral-900);
+  }
+  
+  .ai-hint {
+    border-left-width: 6px;
+  }
+}
+
+/* 减少动画偏好 */
+@media (prefers-reduced-motion: reduce) {
+  .ai-master-content,
+  .ai-master-toggle,
+  .ai-status-indicator {
+    animation: none;
+  }
+  
+  .ai-hint::before {
+    display: none;
+  }
+}
+
+/* 深色模式支持 */
+@media (prefers-color-scheme: dark) {
+  .ai-master-card {
+    background: rgba(0, 0, 0, 0.85);
+    border-color: rgba(99, 102, 241, 0.3);
+  }
+  
+  .ai-master-title {
+    color: var(--color-neutral-200);
+  }
+  
+  .ai-master-subtitle {
+    color: var(--color-neutral-400);
+  }
+  
+  .ai-master-status {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.1);
+  }
+}
+
+/* 打印时隐藏 */
+@media print {
+  .ai-game-master {
+    display: none !important;
+  }
+} 

@@ -1,10 +1,22 @@
 // 通用类型定义
+export interface PlayerPreferences {
+  favoriteGameType?: string;
+  skillLevel?: 'beginner' | 'intermediate' | 'advanced' | 'expert';
+  playStyle?: 'casual' | 'competitive' | 'strategic' | 'social';
+  aiAssistance?: boolean;
+  soundEffects?: boolean;
+  animations?: boolean;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
 export interface Player {
   id: string;
   name: string;
   avatar?: string;
   isHost: boolean;
   isConnected: boolean;
+  preferences?: PlayerPreferences;
 }
 
 export interface Room {

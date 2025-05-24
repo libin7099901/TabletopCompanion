@@ -1,0 +1,224 @@
+/* 🍞 Toast 提示组件样式 - 4K优化 */
+
+.toast {
+  position: fixed;
+  top: clamp(var(--spacing-lg), 2vw, var(--spacing-2xl));
+  right: clamp(var(--spacing-lg), 2vw, var(--spacing-2xl));
+  z-index: var(--z-toast);
+  
+  /* 现代玻璃态设计 */
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: var(--radius-xl);
+  box-shadow: 
+    var(--shadow-xl),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  
+  /* 响应式尺寸 */
+  min-width: clamp(300px, 25vw, 400px);
+  max-width: clamp(400px, 30vw, 500px);
+  
+  /* 动画变换 */
+  transform: translateX(100%);
+  transition: all var(--duration-300) var(--ease-out);
+}
+
+.toast--show {
+  transform: translateX(0);
+}
+
+.toast--hide {
+  transform: translateX(100%);
+  opacity: 0;
+}
+
+/* Toast内容 */
+.toast__content {
+  display: flex;
+  align-items: center;
+  gap: clamp(var(--spacing-sm), 1vw, var(--spacing-md));
+  padding: clamp(var(--spacing-md), 1vw, var(--spacing-lg));
+}
+
+.toast__icon {
+  font-size: clamp(var(--font-size-lg), 1.5vw, var(--font-size-xl));
+  flex-shrink: 0;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+}
+
+.toast__message {
+  flex: 1;
+  font-size: clamp(var(--font-size-sm), 1vw, var(--font-size-base));
+  font-weight: var(--font-weight-medium);
+  color: var(--color-neutral-800);
+  line-height: var(--line-height-relaxed);
+}
+
+.toast__close {
+  background: none;
+  border: none;
+  color: var(--color-neutral-500);
+  font-size: clamp(var(--font-size-sm), 1vw, var(--font-size-base));
+  font-weight: var(--font-weight-bold);
+  cursor: pointer;
+  padding: var(--spacing-xs);
+  border-radius: var(--radius-sm);
+  transition: var(--transition-all);
+  flex-shrink: 0;
+  
+  /* 触摸友好尺寸 */
+  min-width: clamp(24px, 2vw, 32px);
+  min-height: clamp(24px, 2vw, 32px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.toast__close:hover {
+  background: var(--color-neutral-200);
+  color: var(--color-neutral-700);
+  transform: scale(1.1);
+}
+
+/* Toast变体 */
+.toast--success {
+  background: rgba(240, 253, 244, 0.95);
+  border-color: var(--color-success-200);
+  box-shadow: 
+    var(--shadow-xl),
+    inset 0 1px 0 rgba(34, 197, 94, 0.1);
+}
+
+.toast--success .toast__message {
+  color: var(--color-success-800);
+}
+
+.toast--error {
+  background: rgba(254, 242, 242, 0.95);
+  border-color: var(--color-error-200);
+  box-shadow: 
+    var(--shadow-xl),
+    inset 0 1px 0 rgba(239, 68, 68, 0.1);
+}
+
+.toast--error .toast__message {
+  color: var(--color-error-800);
+}
+
+.toast--warning {
+  background: rgba(255, 251, 235, 0.95);
+  border-color: var(--color-warning-200);
+  box-shadow: 
+    var(--shadow-xl),
+    inset 0 1px 0 rgba(245, 158, 11, 0.1);
+}
+
+.toast--warning .toast__message {
+  color: var(--color-warning-800);
+}
+
+.toast--info {
+  background: rgba(239, 246, 255, 0.95);
+  border-color: var(--color-info-200);
+  box-shadow: 
+    var(--shadow-xl),
+    inset 0 1px 0 rgba(59, 130, 246, 0.1);
+}
+
+.toast--info .toast__message {
+  color: var(--color-info-800);
+}
+
+/* 4K显示器优化 */
+@media (min-width: 3440px) {
+  .toast {
+    top: var(--spacing-3xl);
+    right: var(--spacing-3xl);
+    min-width: 400px;
+    max-width: 600px;
+    border-radius: var(--radius-2xl);
+  }
+  
+  .toast__content {
+    padding: var(--spacing-xl);
+  }
+}
+
+/* 移动设备优化 */
+@media (max-width: 767px) {
+  .toast {
+    top: var(--spacing-md);
+    right: var(--spacing-md);
+    left: var(--spacing-md);
+    max-width: none;
+    min-width: auto;
+    
+    /* 从上方滑入 */
+    transform: translateY(-100%);
+  }
+  
+  .toast--show {
+    transform: translateY(0);
+  }
+  
+  .toast--hide {
+    transform: translateY(-100%);
+  }
+  
+  .toast__content {
+    padding: var(--spacing-md);
+  }
+  
+  .toast__close {
+    min-width: 32px;
+    min-height: 32px;
+  }
+}
+
+/* 高对比度支持 */
+@media (prefers-contrast: high) {
+  .toast {
+    background: var(--color-neutral-0);
+    border: 2px solid var(--color-neutral-800);
+  }
+  
+  .toast--success {
+    background: var(--color-success-50);
+    border-color: var(--color-success-600);
+  }
+  
+  .toast--error {
+    background: var(--color-error-50);
+    border-color: var(--color-error-600);
+  }
+  
+  .toast--warning {
+    background: var(--color-warning-50);
+    border-color: var(--color-warning-600);
+  }
+  
+  .toast--info {
+    background: var(--color-info-50);
+    border-color: var(--color-info-600);
+  }
+}
+
+/* 减少动画偏好 */
+@media (prefers-reduced-motion: reduce) {
+  .toast {
+    transition: none;
+  }
+  
+  .toast--show,
+  .toast--hide {
+    transform: none;
+  }
+}
+
+/* 打印时隐藏 */
+@media print {
+  .toast {
+    display: none !important;
+  }
+} 

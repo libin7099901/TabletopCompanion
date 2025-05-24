@@ -86,3 +86,4 @@ temp/
 cypress/downloads/
 cypress/screenshots/
 cypress/videos/ 
+node_modules

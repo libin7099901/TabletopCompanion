@@ -1,0 +1,288 @@
+/* 🃏 纸牌游戏区域样式 */
+
+.card-game-area {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+  padding: var(--spacing-lg);
+  min-height: 600px;
+}
+
+/* === 游戏状态栏 === */
+.game-status {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--spacing-md);
+  background: white;
+  border-radius: var(--radius-base);
+  box-shadow: var(--shadow-sm);
+}
+
+.phase-info,
+.deck-info {
+  font-weight: var(--font-weight-medium);
+  color: var(--color-neutral-700);
+}
+
+/* === 发牌区域 === */
+.dealing-area {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-lg);
+  padding: var(--spacing-xl);
+  background: var(--color-neutral-50);
+  border-radius: var(--radius-lg);
+  border: 2px dashed var(--color-neutral-300);
+}
+
+.deck-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.deck-back {
+  font-size: 4rem;
+  color: var(--color-primary-600);
+  animation: pulse 2s infinite;
+}
+
+.deck-label {
+  font-weight: var(--font-weight-medium);
+  color: var(--color-neutral-600);
+}
+
+.waiting-message {
+  font-style: italic;
+  color: var(--color-neutral-500);
+}
+
+/* === 出牌区域 === */
+.play-area {
+  background: white;
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+.play-area h4 {
+  margin: 0 0 var(--spacing-md) 0;
+  color: var(--color-neutral-800);
+}
+
+.played-cards {
+  display: flex;
+  gap: var(--spacing-md);
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.played-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.player-label {
+  font-size: var(--font-size-xs);
+  color: var(--color-neutral-600);
+  font-weight: var(--font-weight-medium);
+}
+
+/* === 手牌区域 === */
+.hand-area {
+  background: white;
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+.hand-area h4 {
+  margin: 0 0 var(--spacing-md) 0;
+  color: var(--color-neutral-800);
+}
+
+.hand-cards {
+  display: flex;
+  gap: var(--spacing-sm);
+  justify-content: center;
+  flex-wrap: wrap;
+  min-height: 120px;
+  align-items: center;
+}
+
+.no-cards {
+  font-style: italic;
+  color: var(--color-neutral-400);
+  text-align: center;
+  width: 100%;
+}
+
+.play-instruction {
+  margin-top: var(--spacing-md);
+  text-align: center;
+  font-size: var(--font-size-sm);
+  color: var(--color-success-600);
+  font-weight: var(--font-weight-medium);
+}
+
+/* === 卡牌样式 === */
+.game-card {
+  width: 80px;
+  height: 120px;
+  background: white;
+  border: 2px solid var(--color-neutral-300);
+  border-radius: var(--radius-base);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  box-shadow: var(--shadow-sm);
+  position: relative;
+}
+
+.game-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--color-primary-400);
+}
+
+.game-card.playable {
+  border-color: var(--color-success-400);
+}
+
+.game-card.playable:hover {
+  border-color: var(--color-success-500);
+  box-shadow: 0 4px 20px rgba(72, 187, 120, 0.3);
+}
+
+.card-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+.card-rank {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-neutral-800);
+}
+
+.card-suit {
+  font-size: var(--font-size-xl);
+}
+
+/* 花色颜色 */
+.card-content:has(.card-suit:contains('♥')),
+.card-content:has(.card-suit:contains('♦')) {
+  color: #DC2626;
+}
+
+.card-content:has(.card-suit:contains('♣')),
+.card-content:has(.card-suit:contains('♠')) {
+  color: #1F2937;
+}
+
+/* === 玩家状态 === */
+.players-status {
+  display: flex;
+  gap: var(--spacing-md);
+  flex-wrap: wrap;
+}
+
+.player-status {
+  flex: 1;
+  min-width: 200px;
+  padding: var(--spacing-md);
+  background: white;
+  border-radius: var(--radius-base);
+  box-shadow: var(--shadow-sm);
+  border: 2px solid transparent;
+  transition: all var(--transition-fast);
+}
+
+.player-status.active {
+  border-color: var(--color-primary-500);
+  background: var(--color-primary-50);
+}
+
+.player-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--spacing-xs);
+}
+
+.player-name {
+  font-weight: var(--font-weight-medium);
+  color: var(--color-neutral-800);
+}
+
+.hand-count,
+.score {
+  font-size: var(--font-size-sm);
+  color: var(--color-neutral-600);
+}
+
+.turn-indicator {
+  margin-top: var(--spacing-xs);
+  font-size: var(--font-size-xs);
+  color: var(--color-primary-600);
+  font-weight: var(--font-weight-medium);
+  text-align: center;
+}
+
+/* === 动画 === */
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+/* === 响应式设计 === */
+@media (max-width: 768px) {
+  .card-game-area {
+    padding: var(--spacing-md);
+  }
+
+  .game-status {
+    flex-direction: column;
+    gap: var(--spacing-sm);
+    text-align: center;
+  }
+
+  .hand-cards {
+    gap: var(--spacing-xs);
+  }
+
+  .game-card {
+    width: 60px;
+    height: 90px;
+  }
+
+  .card-rank {
+    font-size: var(--font-size-md);
+  }
+
+  .card-suit {
+    font-size: var(--font-size-lg);
+  }
+
+  .players-status {
+    flex-direction: column;
+  }
+
+  .player-status {
+    min-width: auto;
+  }
+} 

@@ -1,0 +1,113 @@
+{
+  "timestamp": "2025-05-24T17:16:45.891Z",
+  "summary": {
+    "total": 29,
+    "passed": 19,
+    "failed": 10,
+    "successRate": "65.5"
+  },
+  "coverage": {
+    "基础功能": {
+      "total": 4,
+      "description": "主页、导航、玩家设置、游戏启动"
+    },
+    "深度功能": {
+      "total": 5,
+      "description": "AI设置、模板管理、玩家设置、游戏开始、演示模式"
+    },
+    "完整流程": {
+      "total": 2,
+      "description": "端到端游戏流程、用户完整体验"
+    },
+    "边界测试": {
+      "total": 3,
+      "description": "边界条件、错误恢复、异常处理"
+    },
+    "技术特性": {
+      "total": 5,
+      "description": "响应式、UI交互、数据持久化、无障碍"
+    },
+    "安全兼容": {
+      "total": 3,
+      "description": "安全防护、浏览器兼容、网络适应"
+    },
+    "性能测试": {
+      "total": 2,
+      "description": "基础性能、负载性能"
+    },
+    "游戏专项": {
+      "total": 2,
+      "description": "游戏状态、游戏界面"
+    },
+    "兼容保留": {
+      "total": 3,
+      "description": "旧版本测试保留"
+    }
+  },
+  "scenarios": [
+    "✅ 新用户注册和设置流程",
+    "✅ 老用户登录和状态恢复",
+    "✅ 单人演示模式游戏",
+    "✅ 多人房间创建和管理",
+    "✅ AI助手交互和配置",
+    "✅ 游戏模板浏览和选择",
+    "✅ 响应式设计多设备适配",
+    "✅ 异常情况处理和恢复",
+    "✅ 数据安全和XSS防护",
+    "✅ 性能监控和优化验证",
+    "✅ 浏览器兼容性验证",
+    "✅ 网络条件适应性测试",
+    "✅ 边界条件和极限测试",
+    "✅ 无障碍功能支持",
+    "✅ UI交互和用户体验"
+  ],
+  "errors": [
+    {
+      "test": "玩家设置深度测试",
+      "error": "Node is either not clickable or not an Element"
+    },
+    {
+      "test": "游戏开始深度测试",
+      "error": "Waiting for selector `[data-testid=\"game-start-page\"]` failed: Waiting failed: 30000ms exceeded"
+    },
+    {
+      "test": "演示模式深度测试",
+      "error": "Waiting for selector `[data-testid=\"game-start-page\"]` failed: Waiting failed: 30000ms exceeded"
+    },
+    {
+      "test": "完整游戏流程测试",
+      "error": "Waiting for selector `[data-testid=\"room-name-input\"]` failed: Waiting failed: 30000ms exceeded"
+    },
+    {
+      "test": "边界条件测试",
+      "error": "输入框未找到: [data-testid=\"player-name-input\"]"
+    },
+    {
+      "test": "错误处理",
+      "error": "Waiting for selector `[data-testid=\"player-setup-card\"]` failed: Waiting failed: 30000ms exceeded"
+    },
+    {
+      "test": "数据完整性测试",
+      "error": "Node is either not clickable or not an Element"
+    },
+    {
+      "test": "网络条件测试",
+      "error": "Protocol error (Network.emulateNetworkConditions): Invalid parameters Failed to deserialize params.downloadThroughput - BINDINGS: mandatory field missing at position 28"
+    },
+    {
+      "test": "模板管理",
+      "error": "Waiting for selector `[data-testid=\"template-management-card\"]` failed: Waiting failed: 30000ms exceeded"
+    },
+    {
+      "test": "游戏创建",
+      "error": "Waiting for selector `[data-testid=\"start-game-card\"]` failed: Waiting failed: 30000ms exceeded"
+    }
+  ],
+  "recommendations": [
+    "优先修复失败的测试用例",
+    "提高测试通过率至90%以上",
+    "定期运行全面测试以确保质量",
+    "监控性能指标变化趋势",
+    "根据用户反馈补充新的测试场景"
+  ]
+}

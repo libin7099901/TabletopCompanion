@@ -3,12 +3,14 @@ import './App.css'
 import Header from './components/layout/Header'
 import HomePage from './components/pages/HomePage'
 import TemplateManagePage from './components/pages/TemplateManagePage'
+import PlayerSetupPage from './components/pages/PlayerSetupPage'
+import AISettingsPage from './components/pages/AISettingsPage'
 import GameStartPage from './components/pages/GameStartPage'
 import GameRoomPage from './components/pages/GameRoomPage'
 import { Player } from './types/common'
 import { StorageService } from './services/StorageService'
 
-type AppPage = 'home' | 'templates' | 'game-start' | 'game-room'
+type AppPage = 'home' | 'templates' | 'player-setup' | 'ai-settings' | 'game-start' | 'game-room'
 
 // 简化的房间状态（不使用Redux）
 interface SimpleRoom {
@@ -67,15 +69,15 @@ const defaultTemplates = [
     components: []
   },
   {
-    id: 'dice_game',
-    name: '骰子游戏',
-    description: '简单有趣的骰子游戏，适合快速游戏',
+    id: 'dice_guess',
+    name: '猜大小',
+    description: '经典的骰子赌博游戏，猜测骰子点数大小',
     type: 'dice' as const,
     minPlayers: 2,
     maxPlayers: 6,
     estimatedTime: 15,
     difficulty: 'easy' as const,
-    rules: '使用6个骰子，比较点数大小...',
+    rules: '使用3个骰子，猜测总点数大小(11-18为大，3-10为小)...',
     components: []
   }
 ]
@@ -272,11 +274,12 @@ function App() {
   }
 
   const handlePlayerSetup = () => {
-    const name = prompt('请输入您的昵称:', currentPlayer?.name || '玩家')
-    if (name) {
-      const player = createPlayer(name, currentPlayer?.id)
-      savePlayerData(player)
-    }
+    navigateTo('player-setup')
+  }
+
+  const handlePlayerSetupComplete = (player: Player) => {
+    savePlayerData(player)
+    navigateTo('home')
   }
 
   // 渲染当前页面
@@ -296,6 +299,7 @@ function App() {
             currentPlayer={currentPlayer}
             onManageTemplates={() => navigateTo('templates')}
             onPlayerSetup={handlePlayerSetup}
+            onAISettings={() => navigateTo('ai-settings')}
             onStartGame={handleStartGameFlow}
           />
         )
@@ -303,6 +307,22 @@ function App() {
       case 'templates':
         return (
           <TemplateManagePage
+            onBack={() => navigateTo('home')}
+          />
+        )
+
+      case 'player-setup':
+        return (
+          <PlayerSetupPage
+            onNext={handlePlayerSetupComplete}
+            onBack={() => navigateTo('home')}
+            existingPlayer={currentPlayer || undefined}
+          />
+        )
+
+      case 'ai-settings':
+        return (
+          <AISettingsPage
             onBack={() => navigateTo('home')}
           />
         )
@@ -328,6 +348,7 @@ function App() {
             onStartGame={handleStartGame}
             onLeaveRoom={handleLeaveRoom}
             onInvitePlayer={handleInvitePlayer}
+            onBack={() => navigateTo('home')}
           />
         ) : null
 

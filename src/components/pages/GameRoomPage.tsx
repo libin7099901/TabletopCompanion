@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, lazy } from 'react';
 import { GameRoom, GameTemplate } from '../../store/roomStore';
 import { Player } from '../../types/common';
-import Button from '../ui/Button';
-import Card from '../ui/Card';
+import AIChatPanel from '../ai/AIChatPanel';
 import './GameRoomPage.css';
 
 interface GameRoomPageProps {
@@ -13,6 +12,7 @@ interface GameRoomPageProps {
   onStartGame: () => void;
   onLeaveRoom: () => void;
   onInvitePlayer: () => void;
+  onBack: () => void;
 }
 
 type RoomView = 'lobby' | 'template-select' | 'game';
@@ -24,9 +24,12 @@ const GameRoomPage: React.FC<GameRoomPageProps> = ({
   onSelectTemplate,
   onStartGame,
   onLeaveRoom,
-  onInvitePlayer
+  onInvitePlayer,
+  onBack
 }) => {
   const [currentView, setCurrentView] = useState<RoomView>('lobby');
+  const [showAIChat, setShowAIChat] = useState(false);
+  const [copySuccess, setCopySuccess] = useState(false);
   
   const isHost = room.hostId === currentPlayer.id;
   const canStart = room.gameTemplate && room.players.length >= (room.gameTemplate.minPlayers || 2);
@@ -47,8 +50,8 @@ const GameRoomPage: React.FC<GameRoomPageProps> = ({
   const copyRoomId = async () => {
     try {
       await navigator.clipboard.writeText(room.id);
-      // 这里可以添加一个toast通知
-      alert('房间ID已复制到剪贴板！');
+      setCopySuccess(true);
+      setTimeout(() => setCopySuccess(false), 2000);
     } catch (error) {
       console.error('复制失败:', error);
     }
@@ -56,55 +59,116 @@ const GameRoomPage: React.FC<GameRoomPageProps> = ({
 
   if (currentView === 'template-select') {
     return (
-      <div className="game-room-page">
-        <div className="room-header">
-          <div className="room-info">
-            <h1 className="room-title">选择游戏模板</h1>
-            <p className="room-subtitle">为房间选择一个游戏模板开始游戏</p>
+      <div className="game-room-page" data-testid="game-room-page">
+        {/* 🧭 导航栏 */}
+        <nav className="main-navbar">
+          <div className="navbar-brand">
+            <div className="navbar-logo">🎲</div>
+            <span className="navbar-app-name">桌游伴侣</span>
           </div>
-          <Button variant="outline" onClick={() => setCurrentView('lobby')}>
-            返回房间
-          </Button>
-        </div>
+          
+          <div className="navbar-user">
+            <div className="user-avatar">{currentPlayer.name.charAt(0).toUpperCase()}</div>
+            <span className="user-name">{currentPlayer.name}</span>
+          </div>
+        </nav>
 
-        <div className="template-grid">
-          <div className="grid grid--cols-3">
-            {templates.map((template) => (
-              <Card
-                key={template.id}
-                variant="elevated"
-                hoverable
-                clickable
-                onClick={() => handleTemplateSelect(template.id)}
-                className={`template-card ${room.gameTemplate?.id === template.id ? 'template-card--selected' : ''}`}
+        <div className="page-container">
+          {/* 🏠 面包屑导航 */}
+          <div className="breadcrumb-nav">
+            <button className="breadcrumb-item" onClick={onBack}>
+              <svg viewBox="0 0 24 24" fill="currentColor">
+                <path d="M10 19v-5h4v5c0 .55.45 1 1 1h3c.55 0 1-.45 1-1v-7h1.7c.46 0 .68-.57.33-.87L12.67 3.6c-.38-.34-.96-.34-1.34 0l-8.36 7.53c-.34.3-.13.87.33.87H5v7c0 .55.45 1 1 1h3c.55 0 1-.45 1-1z"/>
+              </svg>
+              <span>主页</span>
+            </button>
+            <span className="breadcrumb-separator">
+              <svg viewBox="0 0 24 24" fill="currentColor">
+                <path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/>
+              </svg>
+            </span>
+            <button className="breadcrumb-item" onClick={() => setCurrentView('lobby')}>
+              房间 {room.id}
+            </button>
+            <span className="breadcrumb-separator">
+              <svg viewBox="0 0 24 24" fill="currentColor">
+                <path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/>
+              </svg>
+            </span>
+            <span className="breadcrumb-current">选择游戏</span>
+          </div>
+
+          {/* 🎯 页面头部 */}
+          <div className="page-header">
+            <h1 className="page-title">选择游戏模板</h1>
+            <p className="page-subtitle">
+              为房间 "{room.name}" 选择一个游戏模板开始游戏
+            </p>
+          </div>
+
+          {/* 🎮 模板选择网格 */}
+          <div className="template-selection-section">
+            <div className="templates-grid">
+              {templates.map((template) => (
+                <div
+                  key={template.id}
+                  className={`template-card ${room.gameTemplate?.id === template.id ? 'template-card--selected' : ''}`}
+                  onClick={() => handleTemplateSelect(template.id)}
+                  data-testid={`template-${template.id}`}
+                >
+                  <div className="template-header">
+                    <div className="template-type-badge">
+                      <span className="type-icon">{getTypeIcon(template.type)}</span>
+                      <span>{getTypeName(template.type)}</span>
+                    </div>
+                    <div className={`difficulty-badge difficulty--${template.difficulty}`}>
+                      {getDifficultyName(template.difficulty)}
+                    </div>
+                    {room.gameTemplate?.id === template.id && (
+                      <div className="current-badge">
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                          <path d="M9 12l2 2 4-4"/>
+                        </svg>
+                        当前选择
+                      </div>
+                    )}
+                  </div>
+                  
+                  <div className="template-content">
+                    <h3 className="template-title">{template.name}</h3>
+                    <p className="template-description">{template.description}</p>
+                    
+                    <div className="template-meta">
+                      <div className="meta-item">
+                        <span className="meta-icon">👥</span>
+                        <span>{template.minPlayers}-{template.maxPlayers}人</span>
+                      </div>
+                      <div className="meta-item">
+                        <span className="meta-icon">⏱️</span>
+                        <span>{template.estimatedTime}分钟</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="template-action">
+                    <span className="action-text">
+                      {room.gameTemplate?.id === template.id ? '已选择' : '选择此游戏'}
+                    </span>
+                    <span className="action-arrow">→</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* 操作按钮 */}
+            <div className="template-actions">
+              <button 
+                className="btn btn--outline btn--lg"
+                onClick={() => setCurrentView('lobby')}
               >
-                <div className="template-header">
-                  <div className="template-type-badge">
-                    {getTypeIcon(template.type)} {getTypeName(template.type)}
-                  </div>
-                  <div className="difficulty-badge difficulty--${template.difficulty}">
-                    {getDifficultyName(template.difficulty)}
-                  </div>
-                  {room.gameTemplate?.id === template.id && (
-                    <div className="current-badge">当前选择</div>
-                  )}
-                </div>
-                
-                <h3 className="template-title">{template.name}</h3>
-                <p className="template-description">{template.description}</p>
-                
-                <div className="template-meta">
-                  <div className="meta-item">
-                    <span className="meta-icon">👥</span>
-                    <span>{template.minPlayers}-{template.maxPlayers}人</span>
-                  </div>
-                  <div className="meta-item">
-                    <span className="meta-icon">⏱️</span>
-                    <span>{template.estimatedTime}分钟</span>
-                  </div>
-                </div>
-              </Card>
-            ))}
+                返回房间
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -112,28 +176,29 @@ const GameRoomPage: React.FC<GameRoomPageProps> = ({
   }
 
   if (currentView === 'game') {
+    // 导入GameInterface组件
+    const GameInterface = lazy(() => import('../game/GameInterface'));
+    
     return (
       <div className="game-room-page game-playing">
         <div className="game-container">
-          <div className="game-header">
-            <h1>{room.gameTemplate?.name}</h1>
-            <Button variant="outline" onClick={() => setCurrentView('lobby')}>
-              暂停游戏
-            </Button>
-          </div>
-          
-          <div className="game-area">
-            <Card variant="elevated" padding="lg" className="game-board">
-              <div className="game-placeholder">
-                <div className="game-icon">🎮</div>
-                <h3>游戏进行中</h3>
-                <p>这里将显示具体的游戏界面</p>
-                <p className="game-template-info">
-                  当前游戏: {room.gameTemplate?.name}
-                </p>
-              </div>
-            </Card>
-          </div>
+          <React.Suspense fallback={
+            <div className="game-loading">
+              <div className="loading-spinner"></div>
+              <p>正在加载游戏界面...</p>
+            </div>
+          }>
+            <GameInterface
+              templateId={room.gameTemplate!.id}
+              players={room.players}
+              currentPlayer={currentPlayer}
+              onGameEnd={(result) => {
+                console.log('Game ended:', result);
+                setCurrentView('lobby');
+              }}
+              onBack={() => setCurrentView('lobby')}
+            />
+          </React.Suspense>
         </div>
       </div>
     );
@@ -141,155 +206,299 @@ const GameRoomPage: React.FC<GameRoomPageProps> = ({
 
   return (
     <div className="game-room-page">
-      <div className="room-layout">
-        {/* 左侧: 房间信息和控制 */}
-        <div className="room-sidebar">
-          <Card variant="elevated" padding="lg" className="room-info-card">
-            <div className="room-header-info">
-              <h2 className="room-name">{room.name}</h2>
-              <div className="room-id-container">
-                <span className="room-id-label">房间ID:</span>
-                <button className="room-id-btn" onClick={copyRoomId}>
-                  {room.id}
-                  <span className="copy-icon">📋</span>
+      {/* 🧭 导航栏 */}
+      <nav className="main-navbar">
+        <div className="navbar-brand">
+          <div className="navbar-logo">🎲</div>
+          <span className="navbar-app-name">桌游伴侣</span>
+        </div>
+        
+        <div className="navbar-user">
+          <div className="user-avatar">{currentPlayer.name.charAt(0).toUpperCase()}</div>
+          <span className="user-name">{currentPlayer.name}</span>
+        </div>
+      </nav>
+
+      <div className="page-container">
+        {/* 🏠 面包屑导航 */}
+        <div className="breadcrumb-nav">
+          <button className="breadcrumb-item" onClick={onBack}>
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path d="M10 19v-5h4v5c0 .55.45 1 1 1h3c.55 0 1-.45 1-1v-7h1.7c.46 0 .68-.57.33-.87L12.67 3.6c-.38-.34-.96-.34-1.34 0l-8.36 7.53c-.34.3-.13.87.33.87H5v7c0 .55.45 1 1 1h3c.55 0 1-.45 1-1z"/>
+            </svg>
+            <span>主页</span>
+          </button>
+          <span className="breadcrumb-separator">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/>
+            </svg>
+          </span>
+          <span className="breadcrumb-current">房间 {room.id}</span>
+        </div>
+
+        {/* 🎯 页面头部 */}
+        <div className="page-header">
+          <div className="room-header-content">
+            <div className="room-title-section">
+              <h1 className="page-title">{room.name}</h1>
+              <div className="room-meta">
+                <div className="room-id-display">
+                  <span className="room-id-label">房间ID：</span>
+                  <button 
+                    className={`room-id-button ${copySuccess ? 'copied' : ''}`}
+                    onClick={copyRoomId}
+                    data-testid="copy-room-id"
+                  >
+                    {room.id}
+                    <span className="copy-icon">
+                      {copySuccess ? '✓' : '📋'}
+                    </span>
+                  </button>
+                  {copySuccess && <span className="copy-toast">已复制！</span>}
+                </div>
+                <div className="room-status-info">
+                  <div className={`status-badge status--${room.status}`}>
+                    <span className="status-indicator"></span>
+                    {getStatusName(room.status)}
+                  </div>
+                  <span className="player-count-info">
+                    {room.players.length}/{room.maxPlayers} 玩家
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* 🏠 房间主体布局 */}
+        <div className="room-layout">
+          {/* 左侧：房间控制面板 */}
+          <div className="room-sidebar">
+            {/* 游戏模板信息 */}
+            <div className="game-template-section">
+              {room.gameTemplate ? (
+                <div className="current-template-card">
+                  <div className="template-header-info">
+                    <h3 className="section-title">当前游戏</h3>
+                    {isHost && (
+                      <button 
+                        className="btn btn--outline btn--sm"
+                        onClick={() => setCurrentView('template-select')}
+                        data-testid="change-template-btn"
+                      >
+                        切换游戏
+                      </button>
+                    )}
+                  </div>
+                  
+                  <div className="template-display">
+                    <div className="template-icon-display">
+                      {getTypeIcon(room.gameTemplate.type)}
+                    </div>
+                    <div className="template-info">
+                      <h4 className="template-name">{room.gameTemplate.name}</h4>
+                      <div className="template-details">
+                        <span className="detail-item">
+                          <span className="detail-icon">👥</span>
+                          {room.gameTemplate.minPlayers}-{room.gameTemplate.maxPlayers}人
+                        </span>
+                        <span className="detail-item">
+                          <span className="detail-icon">⏱️</span>
+                          {room.gameTemplate.estimatedTime}分钟
+                        </span>
+                        <span className="detail-item">
+                          <span className="detail-icon">🎯</span>
+                          {getDifficultyName(room.gameTemplate.difficulty)}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <div className="no-template-card">
+                  <div className="no-template-content">
+                    <div className="no-template-icon">🎮</div>
+                    <h3>尚未选择游戏</h3>
+                    <p>请选择一个游戏模板来开始游戏</p>
+                    {isHost && (
+                      <button 
+                        className="btn btn--primary btn--sm"
+                        onClick={() => setCurrentView('template-select')}
+                        data-testid="select-template-btn"
+                      >
+                        选择游戏
+                      </button>
+                    )}
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* 房间操作 */}
+            <div className="room-actions-section">
+              <h3 className="section-title">房间操作</h3>
+              
+              <div className="actions-group">
+                {isHost && canStart && (
+                  <button 
+                    className="btn btn--primary btn--lg action-btn start-game-btn"
+                    onClick={onStartGame}
+                    data-testid="start-game-btn"
+                  >
+                    <span className="btn-icon">🚀</span>
+                    开始游戏
+                  </button>
+                )}
+
+                <button 
+                  className="btn btn--secondary btn--lg action-btn"
+                  onClick={onInvitePlayer}
+                  data-testid="invite-player-btn"
+                >
+                  <span className="btn-icon">👥</span>
+                  邀请玩家
+                </button>
+
+                <button 
+                  className="btn btn--outline btn--lg action-btn"
+                  onClick={onLeaveRoom}
+                  data-testid="leave-room-btn"
+                >
+                  <span className="btn-icon">🚪</span>
+                  离开房间
                 </button>
               </div>
             </div>
 
-            <div className="room-status">
-              <div className="status-badge status--${room.status}">
-                {getStatusName(room.status)}
-              </div>
-              <span className="player-count">
-                {room.players.length}/{room.maxPlayers} 玩家
-              </span>
+            {/* AI助手按钮 */}
+            <div className="ai-section">
+              <button 
+                className={`ai-toggle-btn ${showAIChat ? 'active' : ''}`}
+                onClick={() => setShowAIChat(!showAIChat)}
+                data-testid="ai-chat-toggle"
+              >
+                <span className="ai-icon">🤖</span>
+                <span className="ai-text">AI游戏助手</span>
+                <span className="ai-status">{showAIChat ? '已开启' : '点击开启'}</span>
+              </button>
             </div>
+          </div>
 
-            {/* 游戏模板信息 */}
-            {room.gameTemplate ? (
-              <div className="current-template">
-                <h4>当前游戏</h4>
-                <div className="template-summary">
-                  <div className="template-icon">
-                    {getTypeIcon(room.gameTemplate.type)}
-                  </div>
-                  <div className="template-details">
-                    <span className="template-name">{room.gameTemplate.name}</span>
-                    <span className="template-meta-text">
-                      {room.gameTemplate.minPlayers}-{room.gameTemplate.maxPlayers}人 • 
-                      {room.gameTemplate.estimatedTime}分钟
-                    </span>
-                  </div>
-                </div>
-                {/* 添加切换模板功能 */}
-                {isHost && (
-                  <Button 
-                    variant="outline" 
-                    size="sm" 
-                    onClick={() => setCurrentView('template-select')}
-                    className="change-template-btn"
-                  >
-                    切换游戏
-                  </Button>
-                )}
-              </div>
-            ) : (
-              <div className="no-template">
-                <p>尚未选择游戏模板</p>
-                {isHost && (
-                  <Button 
-                    variant="primary" 
-                    size="sm" 
-                    onClick={() => setCurrentView('template-select')}
-                  >
-                    选择游戏
-                  </Button>
-                )}
-              </div>
-            )}
-
-            {/* 房间操作 - 移除重复的模板选择按钮 */}
-            <div className="room-actions">
-              {isHost && canStart && (
-                <Button 
-                  variant="primary" 
-                  fullWidth 
-                  onClick={onStartGame}
-                >
-                  开始游戏
-                </Button>
-              )}
-
-              <div className="action-row">
-                <Button variant="secondary" onClick={onInvitePlayer}>
-                  邀请玩家
-                </Button>
-                <Button variant="outline" onClick={onLeaveRoom}>
-                  离开房间
-                </Button>
-              </div>
-            </div>
-          </Card>
-        </div>
-
-        {/* 中间: 玩家列表 */}
-        <div className="room-main">
-          <Card variant="elevated" padding="lg" className="players-card">
-            <h3 className="players-title">玩家列表</h3>
-            
-            <div className="players-grid">
-              {room.players.map((player) => (
-                <div key={player.id} className="player-item">
-                  <div className="player-avatar">
-                    {player.avatar || '👤'}
-                  </div>
-                  <div className="player-info">
-                    <span className="player-name">{player.name}</span>
-                    {player.id === room.hostId && (
-                      <span className="host-badge">房主</span>
-                    )}
-                    {player.id === currentPlayer.id && (
-                      <span className="self-badge">我</span>
-                    )}
-                  </div>
-                  <div className="player-status">
-                    <div className="status-indicator status--online"></div>
-                  </div>
-                </div>
-              ))}
+          {/* 右侧：玩家列表和活动 */}
+          <div className="room-main">
+            {/* 玩家列表 */}
+            <div className="players-section">
+              <h3 className="section-title">
+                玩家列表 
+                <span className="player-count-badge">
+                  {room.players.length}/{room.maxPlayers}
+                </span>
+              </h3>
               
-              {/* 空位显示 */}
-              {Array.from({ length: room.maxPlayers - room.players.length }).map((_, index) => (
-                <div key={`empty-${index}`} className="player-item player-item--empty">
-                  <div className="player-avatar player-avatar--empty">➕</div>
-                  <div className="player-info">
-                    <span className="player-name">等待玩家加入...</span>
+              <div className="players-grid">
+                {room.players.map((player) => (
+                  <div 
+                    key={player.id} 
+                    className={`player-card ${player.id === currentPlayer.id ? 'player-card--self' : ''}`}
+                    data-testid={`player-${player.id}`}
+                  >
+                    <div className="player-avatar">
+                      {player.avatar || '👤'}
+                    </div>
+                    <div className="player-info">
+                      <span className="player-name">{player.name}</span>
+                      <div className="player-badges">
+                        {player.id === room.hostId && (
+                          <span className="badge badge--host">房主</span>
+                        )}
+                        {player.id === currentPlayer.id && (
+                          <span className="badge badge--self">我</span>
+                        )}
+                      </div>
+                    </div>
+                    <div className="player-status">
+                      <div className="status-dot status--online"></div>
+                      <span className="status-text">在线</span>
+                    </div>
+                  </div>
+                ))}
+                
+                {/* 空位显示 */}
+                {Array.from({ length: room.maxPlayers - room.players.length }).map((_, index) => (
+                  <div key={`empty-${index}`} className="player-card player-card--empty">
+                    <div className="player-avatar player-avatar--empty">
+                      <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm5 11h-4v4h-2v-4H7v-2h4V7h2v4h4v2z"/>
+                      </svg>
+                    </div>
+                    <div className="player-info">
+                      <span className="player-name">等待玩家加入...</span>
+                    </div>
+                    <div className="player-status">
+                      <div className="status-dot status--offline"></div>
+                      <span className="status-text">空位</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* 房间活动 */}
+            <div className="activity-section">
+              <h3 className="section-title">房间活动</h3>
+              
+              <div className="activity-feed">
+                <div className="activity-item">
+                  <div className="activity-avatar">
+                    {currentPlayer.name.charAt(0).toUpperCase()}
+                  </div>
+                  <div className="activity-content">
+                    <span className="activity-text">
+                      <strong>{currentPlayer.name}</strong> 加入了房间
+                    </span>
+                    <span className="activity-time">刚刚</span>
                   </div>
                 </div>
-              ))}
-            </div>
-          </Card>
+                
+                {room.gameTemplate && (
+                  <div className="activity-item">
+                    <div className="activity-avatar activity-avatar--system">
+                      🎮
+                    </div>
+                    <div className="activity-content">
+                      <span className="activity-text">
+                        房主选择了游戏: <strong>{room.gameTemplate.name}</strong>
+                      </span>
+                      <span className="activity-time">1分钟前</span>
+                    </div>
+                  </div>
+                )}
 
-          {/* 房间活动/聊天区域 */}
-          <Card variant="elevated" padding="lg" className="activity-card">
-            <h3 className="activity-title">房间活动</h3>
-            <div className="activity-list">
-              <div className="activity-item">
-                <span className="activity-time">刚刚</span>
-                <span className="activity-text">{currentPlayer.name} 加入了房间</span>
-              </div>
-              {room.gameTemplate && (
                 <div className="activity-item">
-                  <span className="activity-time">1分钟前</span>
-                  <span className="activity-text">
-                    房主选择了游戏: {room.gameTemplate.name}
-                  </span>
+                  <div className="activity-avatar activity-avatar--system">
+                    🏠
+                  </div>
+                  <div className="activity-content">
+                    <span className="activity-text">
+                      房间 "{room.name}" 已创建
+                    </span>
+                    <span className="activity-time">2分钟前</span>
+                  </div>
                 </div>
-              )}
+              </div>
             </div>
-          </Card>
+          </div>
         </div>
       </div>
+
+      {/* AI聊天面板 */}
+      <AIChatPanel
+        currentPlayer={currentPlayer}
+        gameTemplate={room.gameTemplate as any}
+        gameState={undefined}
+        isVisible={showAIChat}
+        onToggle={() => setShowAIChat(!showAIChat)}
+      />
     </div>
   );
 };

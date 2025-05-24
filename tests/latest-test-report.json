@@ -1,0 +1,19 @@
+{
+  "timestamp": "2025-05-24T19:16:15.960Z",
+  "summary": {
+    "total": 22,
+    "passed": 20,
+    "failed": 2,
+    "successRate": "90.9"
+  },
+  "errors": [
+    {
+      "test": "玩家设置深度测试",
+      "error": "Node is either not clickable or not an Element"
+    },
+    {
+      "test": "数据完整性测试",
+      "error": "Node is either not clickable or not an Element"
+    }
+  ]
+}

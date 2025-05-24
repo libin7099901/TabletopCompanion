@@ -399,59 +399,59 @@ function getTemplateById(templateId: string): GameTemplate | null {
 function getDefaultTemplates(): GameTemplate[] {
   return [
     {
-      id: 'poker',
-      name: '德州扑克',
-      description: '经典的扑克游戏，考验心理战术和运气',
-      type: 'card',
-      minPlayers: 2,
-      maxPlayers: 8,
-      estimatedTime: 30,
-      difficulty: 'medium',
-      rules: '使用标准52张扑克牌，每个玩家获得2张底牌...',
-      components: [
-        {
-          id: 'deck',
-          type: 'deck',
-          name: '扑克牌组',
-          properties: { cards: 52, suits: 4 }
-        }
-      ]
-    },
-    {
-      id: 'chess',
-      name: '国际象棋',
-      description: '策略性棋类游戏，锻炼逻辑思维',
+      id: 'gomoku',
+      name: '五子棋',
+      description: '经典的策略棋类游戏，率先连成五子者获胜',
       type: 'board',
       minPlayers: 2,
       maxPlayers: 2,
-      estimatedTime: 45,
-      difficulty: 'hard',
-      rules: '8x8棋盘，每个玩家16个棋子...',
+      estimatedTime: 15,
+      difficulty: 'medium',
+      rules: '两名玩家轮流在15×15的棋盘上放置棋子，率先连成五子者获胜',
       components: [
         {
           id: 'board',
           type: 'board',
-          name: '棋盘',
-          properties: { size: '8x8', squares: 64 }
+          name: '15×15棋盘',
+          properties: { size: '15x15', squares: 225 }
         }
       ]
     },
     {
-      id: 'dice_game',
-      name: '骰子游戏',
-      description: '简单有趣的骰子游戏，适合快速游戏',
+      id: 'card_compare',
+      name: '比大小',
+      description: '简单有趣的纸牌游戏，比较手牌大小',
+      type: 'card',
+      minPlayers: 2,
+      maxPlayers: 4,
+      estimatedTime: 10,
+      difficulty: 'easy',
+      rules: '每轮每位玩家抽取一张牌，比较大小，获胜者得分',
+      components: [
+        {
+          id: 'deck',
+          type: 'deck',
+          name: '标准52张扑克牌',
+          properties: { cards: 52, suits: 4, ranks: 13 }
+        }
+      ]
+    },
+    {
+      id: 'dice_guess',
+      name: '猜大小',
+      description: '经典的骰子赌博游戏，猜测骰子点数大小',
       type: 'dice',
       minPlayers: 2,
       maxPlayers: 6,
-      estimatedTime: 15,
+      estimatedTime: 10,
       difficulty: 'easy',
-      rules: '使用6个骰子，比较点数大小...',
+      rules: '玩家下注猜测三个骰子总点数的大小，猜中获得双倍奖金',
       components: [
         {
           id: 'dice_set',
           type: 'dice',
-          name: '骰子组',
-          properties: { count: 6, sides: 6 }
+          name: '三个六面骰子',
+          properties: { count: 3, sides: 6 }
         }
       ]
     }

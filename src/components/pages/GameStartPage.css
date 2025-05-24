@@ -1,356 +1,1000 @@
-/* 🎨 GameStartPage样式 - 现代化游戏启动界面 */
+/* 🎮 GameStartPage样式 - 现代化游戏模式选择重构 */
 
+/* === 全局页面布局 === */
 .game-start-page {
-  width: 100%;
-  min-height: calc(100vh - 80px);
-}
-
-/* === 游戏模式选择 === */
-.game-modes {
-  margin-bottom: var(--spacing-3xl);
-}
-
-.game-mode-card {
-  text-align: center;
-  padding: var(--spacing-2xl);
-  height: 100%;
+  width: 100vw;
+  min-height: 100vh;
+  background: linear-gradient(135deg, 
+    rgba(102, 126, 234, 0.05) 0%, 
+    rgba(118, 75, 162, 0.05) 100%
+  ), var(--color-neutral-50);
   display: flex;
   flex-direction: column;
+  margin: 0;
+  box-sizing: border-box;
 }
 
-.mode-icon {
-  width: 5rem;
-  height: 5rem;
-  font-size: 2.5rem;
+/* === 主内容容器 === */
+.page-container {
+  flex: 1;
+  width: 100%;
+  max-width: var(--breakpoint-2xl);
+  margin: 0 auto;
+  padding: var(--spacing-6) var(--spacing-6) var(--spacing-8);
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-6);
+}
+
+/* === 🧭 面包屑导航 === */
+.breadcrumb-nav {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  margin-bottom: var(--spacing-4);
+}
+
+.breadcrumb-item {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-1);
+  background: none;
+  border: none;
+  color: var(--color-neutral-600);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  cursor: pointer;
+  padding: var(--spacing-1) var(--spacing-2);
+  border-radius: var(--radius-sm);
+  transition: all var(--duration-150) var(--ease-out);
+}
+
+.breadcrumb-item:hover {
+  color: var(--color-primary-600);
+  background: var(--color-primary-50);
+}
+
+.breadcrumb-item svg {
+  width: 16px;
+  height: 16px;
+}
+
+.breadcrumb-separator {
+  color: var(--color-neutral-400);
+}
+
+.breadcrumb-separator svg {
+  width: 16px;
+  height: 16px;
+}
+
+.breadcrumb-current {
+  color: var(--color-neutral-900);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+}
+
+/* === 📈 进度指示器 === */
+.progress-indicator {
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: var(--radius-full);
-  margin: 0 auto var(--spacing-xl);
-  transition: all var(--transition-base);
+  margin-bottom: var(--spacing-6);
+  padding: var(--spacing-4);
+  background: var(--color-neutral-0);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-neutral-200);
 }
 
-.game-mode-card--create .mode-icon {
-  background: linear-gradient(135deg, var(--color-primary-100), var(--color-primary-200));
-  color: var(--color-primary-700);
+.progress-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-2);
 }
 
-.game-mode-card--join .mode-icon {
-  background: linear-gradient(135deg, var(--color-secondary-100), var(--color-secondary-200));
-  color: var(--color-secondary-700);
+.step-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  transition: all var(--duration-200) var(--ease-out);
 }
 
-.game-mode-card--demo .mode-icon {
-  background: linear-gradient(135deg, var(--color-success-500), #22c55e);
-  color: white;
+.progress-step.completed .step-icon {
+  background: var(--color-success-500);
+  color: var(--color-neutral-0);
+}
+
+.progress-step.active .step-icon {
+  background: var(--color-primary-500);
+  color: var(--color-neutral-0);
+  box-shadow: 0 0 0 4px rgba(var(--color-primary-500-rgb), 0.2);
+}
+
+.progress-step:not(.completed):not(.active) .step-icon {
+  background: var(--color-neutral-200);
+  color: var(--color-neutral-500);
+}
+
+.step-label {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-neutral-600);
+  text-align: center;
+}
+
+.progress-step.active .step-label {
+  color: var(--color-primary-600);
+}
+
+.progress-line {
+  width: 60px;
+  height: 2px;
+  background: var(--color-neutral-200);
+  margin: 0 var(--spacing-3);
+}
+
+/* === 🎯 页面头部 === */
+.page-header {
+  text-align: center;
+  margin-bottom: var(--spacing-6);
+}
+
+.page-title {
+  font-size: clamp(var(--font-size-3xl), 5vw, var(--font-size-4xl));
+  font-weight: var(--font-weight-bold);
+  color: var(--color-neutral-900);
+  margin-bottom: var(--spacing-3);
+  line-height: var(--line-height-tight);
+}
+
+.page-subtitle {
+  font-size: clamp(var(--font-size-lg), 2.5vw, var(--font-size-xl));
+  color: var(--color-neutral-600);
+  line-height: var(--line-height-relaxed);
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* === 🎮 游戏模式选择区域 === */
+.game-modes-section {
+  margin-bottom: var(--spacing-8);
+}
+
+.modes-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: var(--spacing-6);
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* === 游戏模式卡片 === */
+.game-mode-card {
+  background: var(--color-neutral-0);
+  border-radius: var(--radius-xl);
+  padding: var(--spacing-6);
+  border: 2px solid var(--color-neutral-200);
+  box-shadow: var(--shadow-sm);
+  transition: all var(--duration-300) var(--ease-out);
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  min-height: 320px;
+}
+
+.game-mode-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, 
+    var(--color-primary-500) 0%, 
+    var(--color-secondary-500) 100%
+  );
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform var(--duration-300) var(--ease-out);
+}
+
+.game-mode-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--color-primary-300);
+}
+
+.game-mode-card:hover::before {
+  transform: scaleX(1);
+}
+
+/* 特色模式卡片 */
+.mode-card--featured {
+  background: linear-gradient(135deg, 
+    rgba(var(--color-primary-50-rgb), 0.8) 0%, 
+    rgba(var(--color-secondary-50-rgb), 0.6) 100%
+  );
+  border-color: var(--color-primary-300);
+  position: relative;
+}
+
+.mode-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: var(--spacing-4);
+}
+
+.mode-icon {
+  width: 64px;
+  height: 64px;
+  border-radius: var(--radius-lg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow-sm);
+  transition: all var(--duration-200) var(--ease-out);
+}
+
+.mode-icon svg {
+  width: 28px;
+  height: 28px;
+}
+
+.mode-icon--create {
+  background: linear-gradient(135deg, 
+    var(--color-primary-500) 0%, 
+    var(--color-primary-600) 100%
+  );
+  color: var(--color-neutral-0);
+}
+
+.mode-icon--join {
+  background: linear-gradient(135deg, 
+    var(--color-secondary-500) 0%, 
+    var(--color-secondary-600) 100%
+  );
+  color: var(--color-neutral-0);
+}
+
+.mode-icon--demo {
+  background: linear-gradient(135deg, 
+    var(--color-info-500) 0%, 
+    var(--color-info-600) 100%
+  );
+  color: var(--color-neutral-0);
+}
+
+.game-mode-card:hover .mode-icon {
+  transform: scale(1.05);
+  box-shadow: var(--shadow-md);
+}
+
+.mode-badge {
+  background: var(--color-primary-500);
+  color: var(--color-neutral-0);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+  padding: var(--spacing-1) var(--spacing-2);
+  border-radius: var(--radius-md);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.mode-content {
+  flex: 1;
+  margin-bottom: var(--spacing-4);
 }
 
 .mode-title {
   font-size: var(--font-size-xl);
   font-weight: var(--font-weight-semibold);
   color: var(--color-neutral-900);
-  margin: 0 0 var(--spacing-md) 0;
+  margin-bottom: var(--spacing-2);
+  line-height: var(--line-height-tight);
 }
 
 .mode-description {
-  font-size: var(--font-size-sm);
+  font-size: var(--font-size-base);
   color: var(--color-neutral-600);
   line-height: var(--line-height-relaxed);
-  margin-bottom: var(--spacing-lg);
-  flex: 1;
+  margin-bottom: var(--spacing-4);
 }
 
 .mode-features {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-.mode-features li {
-  font-size: var(--font-size-sm);
-  color: var(--color-neutral-700);
-  padding: var(--spacing-xs) 0;
-  border-top: 1px solid var(--color-neutral-100);
-}
-
-.mode-features li:first-child {
-  border-top: none;
-}
-
-/* 悬停效果 */
-.game-mode-card:hover .mode-icon {
-  transform: scale(1.1);
-  box-shadow: var(--shadow-lg);
-}
-
-.game-mode-card--create:hover .mode-icon {
-  background: linear-gradient(135deg, var(--color-primary-200), var(--color-primary-300));
-  color: var(--color-primary-800);
-}
-
-.game-mode-card--join:hover .mode-icon {
-  background: linear-gradient(135deg, var(--color-secondary-200), var(--color-secondary-300));
-  color: var(--color-secondary-800);
-}
-
-.game-mode-card--demo:hover .mode-icon {
-  background: linear-gradient(135deg, #22c55e, #16a34a);
-}
-
-/* === 表单容器 === */
-.form-container {
-  max-width: 500px;
-  margin: 0 auto;
-}
-
-.create-room-form,
-.join-room-form,
-.demo-card {
-  width: 100%;
-}
-
-/* === 表单元素 === */
-.form-group {
-  margin-bottom: var(--spacing-xl);
-}
-
-.form-label {
-  display: block;
-  font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-medium);
-  color: var(--color-neutral-800);
-  margin-bottom: var(--spacing-sm);
-}
-
-.form-input,
-.form-select {
-  width: 100%;
-  padding: var(--spacing-md) var(--spacing-lg);
-  border: 1px solid var(--color-neutral-300);
-  border-radius: var(--radius-base);
-  font-size: var(--font-size-base);
-  color: var(--color-neutral-800);
-  background: white;
-  transition: all var(--transition-fast);
-}
-
-.form-input:focus,
-.form-select:focus {
-  outline: none;
-  border-color: var(--color-primary-500);
-  box-shadow: 0 0 0 3px var(--color-primary-100);
-}
-
-.room-id-input {
-  text-align: center;
-  font-size: var(--font-size-lg);
-  font-weight: var(--font-weight-medium);
-  letter-spacing: 2px;
-  text-transform: uppercase;
-}
-
-/* === 复选框样式 === */
-.form-checkbox-label {
-  display: flex;
-  align-items: center;
-  cursor: pointer;
-  font-size: var(--font-size-base);
-  color: var(--color-neutral-800);
-}
-
-.form-checkbox {
-  width: 1.25rem;
-  height: 1.25rem;
-  margin-right: var(--spacing-md);
-  accent-color: var(--color-primary-500);
-}
-
-.checkbox-text {
-  font-weight: var(--font-weight-medium);
-}
-
-.form-help {
-  font-size: var(--font-size-xs);
-  color: var(--color-neutral-500);
-  margin: var(--spacing-sm) 0 0 0;
-}
-
-/* === 表单操作区域 === */
-.form-actions {
-  display: flex;
-  gap: var(--spacing-md);
-  margin-top: var(--spacing-2xl);
-}
-
-.form-actions button {
-  flex: 1;
-}
-
-/* === 加入房间插图 === */
-.join-illustration {
-  text-align: center;
-  margin-bottom: var(--spacing-2xl);
-}
-
-.join-icon {
-  width: 4rem;
-  height: 4rem;
-  font-size: 2rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: var(--radius-full);
-  background: linear-gradient(135deg, var(--color-secondary-100), var(--color-secondary-200));
-  color: var(--color-secondary-700);
-  margin: 0 auto var(--spacing-lg);
-}
-
-.join-illustration p {
-  font-size: var(--font-size-sm);
-  color: var(--color-neutral-600);
-  margin: 0;
-}
-
-/* === 演示模式插图 === */
-.demo-container {
-  max-width: 600px;
-  margin: 0 auto;
-}
-
-.demo-illustration {
-  text-align: center;
-  margin-bottom: var(--spacing-2xl);
-}
-
-.demo-icon {
-  width: 5rem;
-  height: 5rem;
-  font-size: 2.5rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: var(--radius-full);
-  background: linear-gradient(135deg, var(--color-success-500), #22c55e);
-  color: white;
-  margin: 0 auto var(--spacing-lg);
-}
-
-.demo-illustration h3 {
-  font-size: var(--font-size-xl);
-  font-weight: var(--font-weight-semibold);
-  color: var(--color-neutral-900);
-  margin: 0 0 var(--spacing-md) 0;
-}
-
-.demo-illustration p {
-  font-size: var(--font-size-base);
-  color: var(--color-neutral-600);
-  line-height: var(--line-height-relaxed);
-  margin: 0;
-}
-
-.demo-features {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-md);
-  margin-bottom: var(--spacing-2xl);
+  gap: var(--spacing-2);
 }
 
 .feature-item {
   display: flex;
   align-items: center;
-  padding: var(--spacing-md);
-  background: var(--color-neutral-50);
-  border-radius: var(--radius-base);
+  gap: var(--spacing-2);
   font-size: var(--font-size-sm);
   color: var(--color-neutral-700);
 }
 
 .feature-icon {
-  font-size: 1.25rem;
-  margin-right: var(--spacing-md);
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--font-size-sm);
 }
 
-/* === 响应式设计 === */
-@media (max-width: 1024px) {
-  .game-modes .grid--cols-3 {
-    grid-template-columns: 1fr;
-    max-width: 400px;
-    margin: 0 auto;
+.mode-action {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: var(--spacing-3);
+  border-top: 1px solid var(--color-neutral-200);
+}
+
+.action-text {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-primary-600);
+}
+
+.action-arrow {
+  font-size: var(--font-size-lg);
+  color: var(--color-primary-500);
+  transition: transform var(--duration-150) var(--ease-out);
+}
+
+.game-mode-card:hover .action-arrow {
+  transform: translateX(4px);
+}
+
+/* === 💡 帮助区域 === */
+.help-section {
+  margin-top: var(--spacing-4);
+}
+
+.help-card {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-4);
+  background: linear-gradient(135deg, 
+    rgba(var(--color-warning-50-rgb), 0.8) 0%, 
+    rgba(var(--color-warning-100-rgb), 0.4) 100%
+  );
+  border: 1px solid var(--color-warning-200);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-5);
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.help-icon {
+  font-size: var(--font-size-2xl);
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-warning-100);
+  border-radius: var(--radius-lg);
+  flex-shrink: 0;
+}
+
+.help-content h4 {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-neutral-900);
+  margin: 0 0 var(--spacing-1) 0;
+}
+
+.help-content p {
+  font-size: var(--font-size-sm);
+  color: var(--color-neutral-700);
+  line-height: var(--line-height-relaxed);
+  margin: 0;
+}
+
+/* === 📝 表单区域 === */
+.form-section {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  margin-top: var(--spacing-4);
+}
+
+.create-room-form,
+.join-room-form,
+.demo-form {
+  width: 100%;
+  max-width: 700px;
+  background: var(--color-neutral-0);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--color-neutral-200);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+}
+
+/* 表单头部 */
+.form-header {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-4);
+  padding: var(--spacing-6);
+  background: linear-gradient(135deg, 
+    rgba(var(--color-primary-50-rgb), 0.5) 0%, 
+    rgba(var(--color-secondary-50-rgb), 0.3) 100%
+  );
+  border-bottom: 1px solid var(--color-neutral-200);
+}
+
+.form-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: var(--radius-lg);
+  background: linear-gradient(135deg, 
+    var(--color-primary-500) 0%, 
+    var(--color-primary-600) 100%
+  );
+  color: var(--color-neutral-0);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: var(--shadow-sm);
+}
+
+.form-icon svg {
+  width: 24px;
+  height: 24px;
+}
+
+.form-title {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-neutral-900);
+  margin: 0 0 var(--spacing-1) 0;
+}
+
+.form-description {
+  font-size: var(--font-size-base);
+  color: var(--color-neutral-600);
+  margin: 0;
+  line-height: var(--line-height-normal);
+}
+
+/* 表单主体 */
+.form-body {
+  padding: var(--spacing-6);
+}
+
+.form-section-group {
+  margin-bottom: var(--spacing-6);
+}
+
+.form-section-title {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-neutral-900);
+  margin: 0 0 var(--spacing-4) 0;
+  padding-bottom: var(--spacing-2);
+  border-bottom: 1px solid var(--color-neutral-200);
+}
+
+.form-field {
+  margin-bottom: var(--spacing-4);
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-4);
+}
+
+.field-label {
+  display: block;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-neutral-700);
+  margin-bottom: var(--spacing-2);
+}
+
+.field-required {
+  color: var(--color-danger-500);
+  margin-left: var(--spacing-1);
+}
+
+.field-input,
+.field-select {
+  width: 100%;
+  padding: var(--spacing-3);
+  border: 1px solid var(--color-neutral-300);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-base);
+  color: var(--color-neutral-900);
+  background: var(--color-neutral-0);
+  transition: all var(--duration-150) var(--ease-out);
+}
+
+.field-input:focus,
+.field-select:focus {
+  outline: none;
+  border-color: var(--color-primary-500);
+  box-shadow: 0 0 0 3px rgba(var(--color-primary-500-rgb), 0.1);
+}
+
+.field-hint {
+  font-size: var(--font-size-xs);
+  color: var(--color-neutral-500);
+  margin-top: var(--spacing-1);
+  line-height: var(--line-height-relaxed);
+}
+
+.room-id-input {
+  font-family: var(--font-mono);
+  font-size: var(--font-size-lg);
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+/* === 房间预览 === */
+.room-preview {
+  margin-top: var(--spacing-6);
+  padding: var(--spacing-4);
+  background: var(--color-neutral-50);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-neutral-200);
+}
+
+.preview-title {
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-neutral-700);
+  margin: 0 0 var(--spacing-3) 0;
+}
+
+.preview-card {
+  background: var(--color-neutral-0);
+  border: 1px solid var(--color-neutral-200);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-4);
+}
+
+.preview-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-2);
+}
+
+.preview-name {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-neutral-900);
+}
+
+.preview-type {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-neutral-600);
+  background: var(--color-neutral-100);
+  padding: var(--spacing-1) var(--spacing-2);
+  border-radius: var(--radius-sm);
+}
+
+.preview-info {
+  display: flex;
+  gap: var(--spacing-4);
+}
+
+.preview-players,
+.preview-host {
+  font-size: var(--font-size-sm);
+  color: var(--color-neutral-600);
+}
+
+/* === 加入房间步骤图示 === */
+.join-illustration {
+  margin-bottom: var(--spacing-6);
+}
+
+.illustration-steps {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-3);
+  padding: var(--spacing-4);
+  background: var(--color-neutral-50);
+  border-radius: var(--radius-lg);
+  margin-bottom: var(--spacing-4);
+}
+
+.step-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-1);
+  text-align: center;
+}
+
+.step-number {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--color-primary-500);
+  color: var(--color-neutral-0);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+}
+
+.step-text {
+  font-size: var(--font-size-xs);
+  color: var(--color-neutral-600);
+  font-weight: var(--font-weight-medium);
+}
+
+.step-arrow {
+  color: var(--color-neutral-400);
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-bold);
+}
+
+/* === 演示模式功能网格 === */
+.demo-features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: var(--spacing-4);
+  margin-bottom: var(--spacing-6);
+}
+
+.demo-feature {
+  text-align: center;
+  padding: var(--spacing-4);
+  background: var(--color-neutral-50);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-neutral-200);
+}
+
+.demo-feature .feature-icon {
+  width: 48px;
+  height: 48px;
+  font-size: var(--font-size-xl);
+  background: var(--color-primary-100);
+  border-radius: var(--radius-lg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto var(--spacing-3);
+}
+
+.demo-feature h4 {
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-neutral-900);
+  margin: 0 0 var(--spacing-2) 0;
+}
+
+.demo-feature p {
+  font-size: var(--font-size-sm);
+  color: var(--color-neutral-600);
+  line-height: var(--line-height-relaxed);
+  margin: 0;
+}
+
+/* AI信息卡片 */
+.ai-info-card {
+  display: flex;
+  gap: var(--spacing-4);
+  padding: var(--spacing-5);
+  background: linear-gradient(135deg, 
+    rgba(var(--color-info-50-rgb), 0.8) 0%, 
+    rgba(var(--color-info-100-rgb), 0.4) 100%
+  );
+  border: 1px solid var(--color-info-200);
+  border-radius: var(--radius-lg);
+  margin-bottom: var(--spacing-6);
+}
+
+.ai-avatar {
+  width: 64px;
+  height: 64px;
+  font-size: var(--font-size-2xl);
+  background: var(--color-info-100);
+  border-radius: var(--radius-lg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.ai-description h4 {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-neutral-900);
+  margin: 0 0 var(--spacing-2) 0;
+}
+
+.ai-description p {
+  font-size: var(--font-size-sm);
+  color: var(--color-neutral-700);
+  line-height: var(--line-height-relaxed);
+  margin: 0;
+}
+
+/* === 表单操作按钮 === */
+.form-actions {
+  display: flex;
+  gap: var(--spacing-3);
+  margin-top: var(--spacing-6);
+  padding-top: var(--spacing-6);
+  border-top: 1px solid var(--color-neutral-200);
+}
+
+.form-actions .btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-2);
+}
+
+/* === 加载状态 === */
+.loading-spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid transparent;
+  border-top: 2px solid currentColor;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
   }
 }
 
-@media (max-width: 768px) {
+/* === 📱 响应式设计 === */
+
+/* 4K显示器优化 */
+@media (min-width: 2560px) {
+  .page-container {
+    padding: var(--spacing-10) var(--spacing-8) var(--spacing-12);
+    gap: var(--spacing-8);
+  }
+  
+  .page-title {
+    font-size: var(--font-size-5xl);
+  }
+  
+  .modes-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--spacing-8);
+  }
+  
   .game-mode-card {
-    padding: var(--spacing-xl);
+    min-height: 360px;
+    padding: var(--spacing-8);
+  }
+}
+
+/* 大屏幕优化 */
+@media (min-width: 1400px) {
+  .modes-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  
+  .create-room-form,
+  .join-room-form,
+  .demo-form {
+    max-width: 800px;
+  }
+}
+
+/* 标准桌面 */
+@media (min-width: 1024px) and (max-width: 1399px) {
+  .page-container {
+    padding: var(--spacing-6);
+  }
+  
+  .modes-grid {
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  }
+}
+
+/* 平板设备 */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .page-container {
+    padding: var(--spacing-5);
+    gap: var(--spacing-5);
+  }
+  
+  .modes-grid {
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: var(--spacing-4);
+  }
+  
+  .game-mode-card {
+    min-height: 280px;
+    padding: var(--spacing-5);
+  }
+  
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+  
+  .illustration-steps {
+    flex-direction: column;
+    gap: var(--spacing-2);
+  }
+  
+  .step-arrow {
+    transform: rotate(90deg);
+  }
+  
+  .demo-features-grid {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  }
+  
+  .progress-indicator {
+    padding: var(--spacing-3);
+  }
+  
+  .progress-line {
+    width: 40px;
+  }
+}
+
+/* 移动设备 */
+@media (max-width: 767px) {
+  .page-container {
+    padding: var(--spacing-4);
+    gap: var(--spacing-4);
+  }
+  
+  .page-title {
+    font-size: var(--font-size-2xl);
+  }
+  
+  .page-subtitle {
+    font-size: var(--font-size-base);
+  }
+  
+  .modes-grid {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-4);
+  }
+  
+  .game-mode-card {
+    min-height: 260px;
+    padding: var(--spacing-4);
   }
   
   .mode-icon {
-    width: 4rem;
-    height: 4rem;
-    font-size: 2rem;
+    width: 56px;
+    height: 56px;
   }
   
-  .form-container {
-    max-width: 100%;
+  .mode-icon svg {
+    width: 24px;
+    height: 24px;
   }
   
-  .demo-container {
-    max-width: 100%;
+  .form-row {
+    grid-template-columns: 1fr;
   }
   
-  .demo-features {
-    gap: var(--spacing-sm);
-  }
-  
-  .feature-item {
-    font-size: var(--font-size-xs);
-    padding: var(--spacing-sm);
-  }
-}
-
-@media (max-width: 640px) {
   .form-actions {
     flex-direction: column;
   }
   
-  .mode-icon {
-    width: 3rem;
-    height: 3rem;
-    font-size: 1.5rem;
+  .breadcrumb-nav {
+    flex-wrap: wrap;
+    gap: var(--spacing-1);
   }
   
-  .join-icon,
-  .demo-icon {
-    width: 3rem;
-    height: 3rem;
-    font-size: 1.5rem;
+  .illustration-steps {
+    flex-direction: column;
+    gap: var(--spacing-2);
+  }
+  
+  .step-arrow {
+    transform: rotate(90deg);
+  }
+  
+  .demo-features-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .ai-info-card {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .help-card {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .progress-indicator {
+    padding: var(--spacing-2);
+    overflow-x: auto;
+  }
+  
+  .progress-line {
+    width: 30px;
+  }
+  
+  .step-icon {
+    width: 32px;
+    height: 32px;
   }
 }
 
-/* === 无障碍增强 === */
+/* === ♿ 无障碍和用户偏好 === */
 @media (prefers-reduced-motion: reduce) {
+  .game-mode-card,
   .mode-icon,
-  .join-icon,
-  .demo-icon {
+  .action-arrow,
+  .loading-spinner {
     transition: none;
+    animation: none;
   }
   
-  .game-mode-card:hover .mode-icon {
+  .game-mode-card:hover,
+  .mode-icon:hover {
     transform: none;
   }
 }
 
-/* === 高对比度模式 === */
 @media (prefers-contrast: high) {
-  .form-input,
-  .form-select {
-    border-color: #000;
+  .game-mode-card,
+  .create-room-form,
+  .join-room-form,
+  .demo-form {
+    border-width: 2px;
+    border-color: var(--color-neutral-400);
   }
   
-  .form-input:focus,
-  .form-select:focus {
-    border-color: #000;
-    box-shadow: 0 0 0 2px #000;
+  .mode-title,
+  .form-title {
+    color: var(--color-neutral-900);
+    font-weight: var(--font-weight-bold);
+  }
+}
+
+/* === 🖨️ 打印样式 === */
+@media print {
+  .game-start-page {
+    background: white !important;
+  }
+  
+  .game-mode-card,
+  .create-room-form,
+  .join-room-form,
+  .demo-form {
+    break-inside: avoid;
+    background: white !important;
+    border: 1px solid #ccc !important;
+    box-shadow: none !important;
+  }
+  
+  .form-actions,
+  .mode-action,
+  .help-section {
+    display: none !important;
   }
 } 
