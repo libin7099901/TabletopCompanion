@@ -112,34 +112,114 @@ beforeEach(() => {
     
     (win as any).RTCIceCandidate = MockRTCIceCandidate
     
-    // Mock WebSocket with constructor function
-    function MockWebSocket() {
-      this.readyState = 1
-      this.CONNECTING = 0
-      this.OPEN = 1
-      this.CLOSING = 2
-      this.CLOSED = 3
-      this.onopen = null
-      this.onclose = null
-      this.onmessage = null
-      this.onerror = null
-      
-      const self = this
+    // Mock WebSocket more robustly
+    function MockWebSocket(url: string) {
+      // console.log(`MockWebSocket: New connection to ${url}`);
+      this.url = url;
+      this.readyState = MockWebSocket.CONNECTING; // Initial state
+      this.protocol = ''; // Typically set by the server
+      this.extensions = '';
+      this.bufferedAmount = 0;
+
+      // Event handlers
+      this.onopen = null;
+      this.onclose = null;
+      this.onmessage = null;
+      this.onerror = null;
+
+      // Internal list of event listeners for addEventListener/removeEventListener
+      this._listeners = { open: [], close: [], message: [], error: [] };
+
+      // Simulate connection opening after a short delay
       setTimeout(() => {
-        if (self.onopen) self.onopen({})
-      }, 100)
-      
-      this.send = () => {}
-      this.close = () => {}
-      this.addEventListener = () => {}
-      this.removeEventListener = () => {}
+        if (this.readyState === MockWebSocket.CONNECTING) {
+          this.readyState = MockWebSocket.OPEN;
+          const event = { type: 'open', target: this };
+          if (typeof this.onopen === 'function') {
+            this.onopen(event);
+          }
+          this._listeners.open.forEach((listener: any) => listener(event));
+          // console.log(`MockWebSocket: ${this.url} OPENED`);
+        }
+      }, 50);
+
+      this.send = (data: any) => {
+        if (this.readyState !== MockWebSocket.OPEN) {
+          throw new Error('WebSocket is not open: readyState is ' + this.readyState);
+        }
+        // console.log(`MockWebSocket: ${this.url} SEND:`, data);
+        // To simulate receiving a message (e.g., echo)
+        // setTimeout(() => {
+        //   const messageEvent = { type: 'message', data: `Echo: ${data}`, target: this };
+        //   if (typeof this.onmessage === 'function') this.onmessage(messageEvent);
+        //   this._listeners.message.forEach(listener => listener(messageEvent));
+        // }, 100);
+      };
+
+      this.close = (code?: number, reason?: string) => {
+        // console.log(`MockWebSocket: ${this.url} CLOSE called with code=${code}, reason=${reason}`);
+        if (this.readyState === MockWebSocket.CLOSED || this.readyState === MockWebSocket.CLOSING) {
+          return;
+        }
+        this.readyState = MockWebSocket.CLOSING;
+        setTimeout(() => {
+          this.readyState = MockWebSocket.CLOSED;
+          const event = { type: 'close', code: code || 1000, reason: reason || 'Normal Closure', wasClean: true, target: this };
+          if (typeof this.onclose === 'function') {
+            this.onclose(event);
+          }
+          this._listeners.close.forEach((listener: any) => listener(event));
+          // console.log(`MockWebSocket: ${this.url} CLOSED`);
+        }, 50);
+      };
+
+      this.addEventListener = (type: string, listener: EventListenerOrEventListenerObject) => {
+        if (this._listeners[type]) {
+          this._listeners[type].push(listener);
+        } else {
+          // console.warn(`MockWebSocket: addEventListener for unsupported type: ${type}`);
+        }
+      };
+
+      this.removeEventListener = (type: string, listenerToRemove: EventListenerOrEventListenerObject) => {
+        if (this._listeners[type]) {
+          this._listeners[type] = this._listeners[type].filter((listener: any) => listener !== listenerToRemove);
+        } else {
+          // console.warn(`MockWebSocket: removeEventListener for unsupported type: ${type}`);
+        }
+      };
+
+      // Custom method for tests to simulate receiving a message
+      this.simulateMessage = (data: any) => {
+        if (this.readyState === MockWebSocket.OPEN) {
+          const messageEvent = { type: 'message', data, target: this, origin: this.url, lastEventId: '', source: null, ports: [] };
+          if (typeof this.onmessage === 'function') {
+            this.onmessage(messageEvent);
+          }
+          this._listeners.message.forEach((listener: any) => listener(messageEvent));
+        } else {
+          // console.warn('MockWebSocket: simulateMessage called but WebSocket is not open.');
+        }
+      };
+       // Custom method for tests to simulate an error
+      this.simulateError = (errorMessage: string) => {
+        const errorEvent = { type: 'error', message: errorMessage, target: this };
+        if (typeof this.onerror === 'function') {
+          this.onerror(errorEvent);
+        }
+        this._listeners.error.forEach((listener: any) => listener(errorEvent));
+         // console.error(`MockWebSocket: ${this.url} SIMULATED ERROR: ${errorMessage}`);
+         // Optionally close the WebSocket on error
+        this.close(1006, 'Simulated WebSocket error');
+      };
     }
-    
-    MockWebSocket.CONNECTING = 0
-    MockWebSocket.OPEN = 1
-    MockWebSocket.CLOSING = 2
-    MockWebSocket.CLOSED = 3
-    
+
+    // Static constants for WebSocket states
+    MockWebSocket.CONNECTING = 0;
+    MockWebSocket.OPEN = 1;
+    MockWebSocket.CLOSING = 2;
+    MockWebSocket.CLOSED = 3;
+
     (win as any).WebSocket = MockWebSocket
     
     // Mock crypto.randomUUID

@@ -3,14 +3,35 @@
 /* 导入设计token */
 @import './styles/design-tokens.css';
 
+/* === 全局重置 === */
+html,
+body,
+#root, /* 常见 React 应用根ID */
+.app { /* 应用根容器 */
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  overflow-x: hidden; /* 防止水平滚动条 */
+}
+
+body {
+  min-height: 100vh; /* 确保 body 至少占满视口高度 */
+  font-family: var(--font-family-sans);
+  background: var(--color-neutral-50); /* 基础背景色 */
+  color: var(--color-neutral-800); /* 基础文字颜色 */
+  line-height: var(--line-height-normal);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
 /* === 应用根容器 === */
 .app {
-  min-height: 100vh;
-  width: 100vw;
+  min-height: 100%; /* 继承body的高度 */
   display: flex;
   flex-direction: column;
-  position: relative;
-  overflow-x: hidden;
+  position: relative; /* 保持相对定位，如果内部有绝对定位元素 */
   
   /* 现代化渐变背景 - 4K适配 */
   background: 
@@ -35,33 +56,38 @@
 
 /* === 主内容区域 === */
 .main-content {
-  flex: 1;
-  width: 100%;
-  min-height: 100vh;
+  flex: 1; /* 占据剩余空间 */
+  width: 100%; /* 确保主内容区占满父容器宽度 */
   display: flex;
   flex-direction: column;
-  position: relative;
+  position: relative; /* 保持，如果内部有绝对定位 */
   z-index: var(--z-10);
-  
-  /* 智能内边距系统 */
-  padding: 
-    clamp(var(--spacing-lg), 2vw, var(--spacing-3xl))
-    clamp(var(--spacing-md), 3vw, var(--spacing-6xl));
-  
-  /* 4K显示器优化 */
-  max-width: var(--layout-4k-max-width);
-  margin: 0 auto;
+  padding: 0 !important; /* 确保无内边距，并提高优先级 */
+  margin: 0; /* 确保无外边距 */
+  box-sizing: border-box; /* 统一盒模型 */
+  /* min-height 不再需要基于视口计算，flex:1 会处理高度 */
 }
 
 /* === 页面容器系统 === */
 .page-container {
-  width: 100%;
-  max-width: none;
-  margin: 0 auto;
-  padding: 0;
+  width: 100%; /* 确保页面容器占满父容器宽度 */
+  margin: 0; /* 确保无外边距 */
+  padding: var(--spacing-md); /* 内边距由具体页面控制 */
   display: flex;
   flex-direction: column;
-  min-height: calc(100vh - 2 * clamp(var(--spacing-lg), 2vw, var(--spacing-3xl)));
+  flex: 1; /* 让页面容器也flex grow */
+  box-sizing: border-box; /* 统一盒模型 */
+}
+
+/* === 有固定导航栏的页面特殊处理 === */
+/* .page-with-navbar class 似乎不再需要，因为main-content的padding-top为0 */
+/* 如果Header是fixed/sticky，main-content应该有padding-top来避免重叠 */
+/* 假设Header是sticky，并且其高度是可变的或通过JS设置，或者我们知道其固定高度 */
+.main-content.page-with-navbar {
+  /* 如果Header是sticky的，这里需要一个padding-top来防止内容被遮挡 */
+  /* 例如: padding-top: var(--header-height, 80px); */
+  /* 目前，我们假设Header是sticky，且App.tsx中的main-content上层没有其他元素干扰布局 */
+  padding-top: 0 !important; 
 }
 
 /* === 页面头部组件 === */
@@ -379,7 +405,7 @@
 /* 超小屏设备 (320px - 479px) */
 @media (max-width: 479px) {
   .main-content {
-    padding: var(--spacing-sm) var(--spacing-xs);
+    padding: 0 !important; /* 移除内边距 */
   }
   
   .page-header {
@@ -401,7 +427,7 @@
 /* 小屏设备 (480px - 767px) */
 @media (min-width: 480px) and (max-width: 767px) {
   .main-content {
-    padding: var(--spacing-md) var(--spacing-sm);
+    padding: 0 !important; /* 移除内边距 */
   }
   
   .page-header {
@@ -417,7 +443,7 @@
 /* 平板设备 (768px - 1023px) */
 @media (min-width: 768px) and (max-width: 1023px) {
   .main-content {
-    padding: var(--spacing-lg) var(--spacing-md);
+    padding: 0 !important; /* 移除内边距 */
   }
   
   .grid--cols-4 {
@@ -428,14 +454,16 @@
 /* 笔记本设备 (1024px - 1439px) */
 @media (min-width: 1024px) and (max-width: 1439px) {
   .main-content {
-    padding: var(--spacing-xl) var(--spacing-lg);
+    padding: 0 !important; /* 移除内边距 */
   }
 }
 
 /* 桌面设备 (1440px - 2559px) */
 @media (min-width: 1440px) and (max-width: 2559px) {
   .main-content {
-    padding: var(--spacing-2xl) var(--spacing-xl);
+    padding: 0 !important; /* 移除内边距 */
+    /* max-width: var(--layout-desktop-max-width); */ /* 保持最大宽度限制 */
+    /* margin: 0 auto; */ /* 居中 */
   }
 }
 
@@ -446,8 +474,9 @@
   }
   
   .main-content {
-    padding: var(--spacing-3xl) var(--spacing-2xl);
+    padding: 0 !important; /* 移除内边距 */
     max-width: var(--layout-4k-max-width);
+    margin: 0 auto; /* 4K下通常需要居中内容 */
   }
   
   .page-header {
@@ -462,7 +491,8 @@
 /* === 超宽屏优化 (3440px+) === */
 @media (min-width: 3440px) {
   .main-content {
-    padding: var(--spacing-4xl) var(--spacing-3xl);
+    padding: 0 !important; /* 移除内边距 */
+    margin: 0 auto; /* 超宽屏下通常需要居中内容 */
   }
   
   .page-container {

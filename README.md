@@ -1,223 +1,254 @@
-# 🎮 桌游伴侣 (TabletopCompanion)
+# 🎲 桌游助手 (Tabletop Game Assistant)
 
-一个现代化的桌游助手应用，支持多人在线游戏、AI对手、游戏模板管理等功能。
+一个现代化的Web桌游助手应用，支持动态游戏模板加载、AI对战和多人游戏体验。
 
-![License](https://img.shields.io/badge/license-MIT-blue.svg)
-![React](https://img.shields.io/badge/react-18.2.0-blue.svg)
-![TypeScript](https://img.shields.io/badge/typescript-5.0-blue.svg)
-![Vite](https://img.shields.io/badge/vite-5.4-green.svg)
+## ✨ 主要特性
 
-## ✨ 功能特性
+### 🎮 动态游戏模板系统
+- **智能加载**: 支持动态加载和懒加载游戏模板
+- **丰富模板**: 内置多种经典桌游（井字棋、五子棋、石头剪刀布等）
+- **模板管理**: 完整的模板浏览、搜索、过滤和详情查看
+- **可扩展性**: 易于添加新的游戏模板
 
-### 🎯 核心功能
-- **多人房间系统** - 创建或加入游戏房间，支持最多8人同时游戏
-- **游戏模板管理** - 内置多种经典游戏模板（德州扑克、国际象棋、骰子游戏等）
-- **模板切换功能** - 房主可随时切换游戏模板，支持灵活的游戏体验
-- **演示模式** - 单人练习模式，配备AI助手
-- **实时同步** - 房间状态实时更新，玩家操作即时反馈
+### 🤖 AI对战支持
+- **多难度AI**: 从入门到专家级别的AI对手
+- **智能策略**: 针对不同游戏的专用AI算法
+- **行为模式**: 保守、平衡、激进等不同AI性格
 
-### 🎨 用户体验
-- **现代化UI** - 采用最新设计规范，支持深色/浅色主题
-- **响应式设计** - 完美适配桌面、平板、手机三端
-- **无障碍支持** - 支持屏幕阅读器、键盘导航、高对比度模式
-- **性能优化** - 页面加载 < 2秒，操作响应 < 500ms
+### 🎨 现代化界面
+- **响应式设计**: 完美适配桌面、平板和移动设备
+- **4K优化**: 针对高分辨率显示器的特别优化
+- **动画效果**: 流畅的过渡动画和交互反馈
+- **主题系统**: 统一的设计语言和视觉风格
 
-### 🛠️ 技术特性
-- **端到端测试** - 完整的Cypress自动化测试覆盖
-- **类型安全** - 100% TypeScript编写，编译时类型检查
-- **模块化架构** - 可扩展的组件系统和状态管理
-- **本地持久化** - 玩家数据和房间状态本地存储
+### 👥 多人游戏支持
+- **本地多人**: 支持2-8人同时游戏
+- **玩家管理**: 完整的玩家信息配置系统
+- **实时游戏**: 流畅的实时游戏体验
+
+## 🎯 内置游戏
+
+### 策略游戏
+- **井字棋** ⭕: 经典3×3棋盘游戏，支持AI对战
+- **五子棋** ♟️: 15×15棋盘，率先连成五子获胜
+
+### 派对游戏
+- **石头剪刀布** ✂️: 支持多人同时游戏，三局两胜制
+
+### 纸牌游戏
+- **比大小** 🃏: 简单有趣的纸牌比较游戏
+
+### 骰子游戏
+- **猜大小** 🎲: 经典的骰子博弈游戏，支持筹码系统
 
 ## 🚀 快速开始
 
 ### 环境要求
-- Node.js >= 18.0.0
-- npm >= 9.0.0 或 yarn >= 1.22.0
+- Node.js 16.0 或更高版本
+- npm 或 yarn 包管理器
+- 现代浏览器（Chrome、Firefox、Safari、Edge）
 
-### 安装依赖
+### 安装运行
+
+1. **克隆项目**
 ```bash
-# 克隆项目
-git clone https://github.com/libin7099901/TabletopCompanion.git
-cd TabletopCompanion
+git clone https://github.com/your-username/tabletop-game-assistant.git
+cd tabletop-game-assistant
+```
 
-# 安装依赖
+2. **安装依赖**
+```bash
 npm install
+```
 
-# 启动开发服务器
+3. **启动开发服务器**
+```bash
 npm run dev
 ```
 
-### 访问应用
-打开浏览器访问 [http://localhost:3000](http://localhost:3000)
+4. **访问应用**
+打开浏览器访问 `http://localhost:3001`
 
-## 📱 使用指南
+### 构建部署
 
-### 1. 设置玩家信息
-- 首次进入时，点击右上角设置玩家昵称
-- 系统会自动生成玩家ID并保存到本地
-
-### 2. 创建游戏房间
 ```bash
-开始游戏 → 创建房间 → 设置房间参数 → 邀请好友
+# 生产环境构建
+npm run build
+
+# 预览构建结果
+npm run preview
 ```
-- 支持2-8人房间
-- 可设置房间密码
-- 自动生成分享用的房间ID
 
-### 3. 选择游戏模板
-- 房主可在房间内选择游戏模板
-- 支持实时切换不同游戏
-- 内置多种经典游戏模板
-
-### 4. 开始游戏
-- 达到最低人数要求后即可开始
-- 支持暂停和重新开始
-- 游戏状态实时同步
-
-## 🎮 游戏模板
-
-### 🃏 卡牌游戏
-- **德州扑克** - 2-8人，30分钟，中等难度
-- 经典的扑克游戏，考验心理战术和运气
-
-### ♟️ 棋类游戏  
-- **国际象棋** - 2人，45分钟，困难
-- 策略性棋类游戏，锻炼逻辑思维
-
-### 🎲 骰子游戏
-- **骰子游戏** - 2-6人，15分钟，简单
-- 简单有趣的骰子游戏，适合快速游戏
-
-## 🏗️ 项目结构
+## 📁 项目结构
 
 ```
 src/
-├── components/          # 可复用组件
-│   ├── layout/         # 布局组件
+├── components/          # React组件
 │   ├── pages/          # 页面组件
-│   ├── room/           # 房间相关组件
-│   └── ui/             # 基础UI组件
+│   │   ├── HomePage.tsx           # 首页
+│   │   ├── TemplateManagePage.tsx # 模板管理
+│   │   ├── PlayerSetupPage.tsx    # 玩家设置
+│   │   ├── AISettingsPage.tsx     # AI设置
+│   │   └── GameRoomPage.tsx       # 游戏房间
+│   └── game/           # 游戏相关组件
 ├── services/           # 服务层
-│   ├── StorageService.ts
-│   └── TemplateService.ts
-├── store/              # 状态管理
-│   └── roomStore.ts
+│   └── DynamicGameLoader.ts      # 动态游戏加载器
+├── games/              # 游戏实现
+│   ├── TicTacToeGame.ts          # 井字棋
+│   ├── RockPaperScissorsGame.ts  # 石头剪刀布
+│   └── ...
+├── types/              # TypeScript类型定义
 ├── styles/             # 样式文件
-│   ├── design-tokens.css
-│   └── global.css
-├── types/              # 类型定义
-│   └── common.ts
 └── utils/              # 工具函数
 ```
 
-## 🧪 测试
-
-### 运行测试
-```bash
-# 运行端到端测试
-npm run test:e2e
-
-# 运行组件测试  
-npm run test:component
-
-# 生成测试报告
-npm run test:report
-```
-
-### 测试覆盖
-- ✅ 应用启动测试
-- ✅ 玩家设置流程  
-- ✅ 房间创建和加入
-- ✅ 模板选择和切换
-- ✅ 游戏启动流程
-- ✅ 响应式设计验证
-- ✅ 性能基准测试
-
-## 🔧 开发指南
-
-### 脚本命令
-```bash
-npm run dev          # 启动开发服务器
-npm run build        # 构建生产版本
-npm run preview      # 预览生产构建
-npm run lint         # 代码规范检查
-npm run type-check   # TypeScript类型检查
-```
+## 🎮 游戏开发
 
 ### 添加新游戏模板
-1. 在 `src/store/roomStore.ts` 中添加模板定义
-2. 在 `GameRoomPage.tsx` 中添加游戏逻辑
-3. 创建对应的CSS样式文件
-4. 添加相应的测试用例
 
-## 🐛 问题反馈
+1. **创建游戏文件**
+在 `src/games/` 目录下创建新的游戏实现：
 
-如果您遇到任何问题或有功能建议，请提交Issue：
+```typescript
+// YourGame.ts
+export class YourGameRules implements GameRules {
+  validateAction(state: GameState, action: GameAction): boolean {
+    // 验证游戏动作
+  }
+  
+  executeAction(state: GameState, action: GameAction): GameState {
+    // 执行游戏动作
+  }
+  
+  checkWinCondition(state: GameState): WinResult | null {
+    // 检查胜利条件
+  }
+  
+  // ... 其他必需方法
+}
 
-**问题报告模板：**
+export function createYourGame() {
+  return {
+    rules: new YourGameRules(),
+    initialState: { /* 初始状态 */ }
+  };
+}
 ```
-### 环境信息
-- 浏览器版本：
-- 操作系统：
-- Node.js版本：
 
-### 问题描述
-详细描述遇到的问题...
+2. **注册模板**
+在 `DynamicGameLoader.ts` 中添加模板定义：
 
-### 复现步骤
-1. 步骤一
-2. 步骤二
-3. 步骤三
-
-### 期望结果
-描述期望的正确行为...
+```typescript
+{
+  id: 'yourGame',
+  name: '你的游戏',
+  description: '游戏描述',
+  category: 'strategy',
+  // ... 其他属性
+  createGame: async () => {
+    const { createYourGame } = await import('../games/YourGame');
+    return createYourGame();
+  }
+}
 ```
+
+## 📚 文档
+
+- [🎮 动态游戏模板系统文档](docs/dynamic-game-system.md)
+- [📚 用户使用指南](docs/user-guide.md)
+- [🔧 开发者指南](docs/developer-guide.md)
+
+## 🛠 技术栈
+
+### 前端技术
+- **React 18**: 用户界面框架
+- **TypeScript**: 类型安全的JavaScript
+- **Vite**: 现代化构建工具
+- **CSS Modules**: 模块化样式系统
+
+### 游戏引擎
+- **自研轻量级引擎**: 专为桌游优化的游戏状态管理
+- **模块化设计**: 易于扩展和维护
+- **AI系统**: 支持多种AI算法和策略
+
+### 开发工具
+- **ESLint**: 代码质量检查
+- **Prettier**: 代码格式化
+- **Hot Reload**: 开发时热更新
+
+## 🔄 更新日志
+
+### v2.0.0 (2024-12-01)
+- ✨ 全新动态游戏模板系统
+- 🎨 现代化界面重构
+- 🤖 增强的AI对战功能
+- 📱 完善的响应式设计
+- 🎮 新增石头剪刀布游戏
+- 🔧 优化构建和部署流程
+
+### v1.0.0 (2024-01-01)
+- 🎉 项目初始版本
+- 🎮 基础游戏模板支持
+- 👥 多人游戏功能
+- 🎨 基础界面设计
 
 ## 🤝 贡献指南
 
-我们欢迎所有形式的贡献！
+我们欢迎各种形式的贡献！
 
-### 开发流程
-1. Fork 项目
-2. 创建特性分支: `git checkout -b feature/amazing-feature`
-3. 提交更改: `git commit -m 'Add amazing feature'`
-4. 推送分支: `git push origin feature/amazing-feature`
-5. 提交Pull Request
+### 如何贡献
+1. Fork 项目仓库
+2. 创建功能分支 (`git checkout -b feature/AmazingFeature`)
+3. 提交更改 (`git commit -m 'Add some AmazingFeature'`)
+4. 推送到分支 (`git push origin feature/AmazingFeature`)
+5. 创建 Pull Request
 
-### 代码规范
-- 使用 ESLint + Prettier 进行代码格式化
-- 遵循 TypeScript 严格模式
-- 组件使用函数式组件 + Hooks
-- CSS 使用 BEM 命名规范
+### 贡献类型
+- 🐛 Bug修复
+- ✨ 新功能开发
+- 📚 文档改进
+- 🎨 界面优化
+- 🎮 新游戏模板
+- 🔧 性能优化
 
-## 📄 开源协议
+## 📞 支持与反馈
 
-本项目基于 MIT 协议开源。详见 [LICENSE](LICENSE) 文件。
+- **GitHub Issues**: [提交bug报告或功能请求](https://github.com/your-username/tabletop-game-assistant/issues)
+- **邮箱支持**: support@tabletop-assistant.com
+- **在线文档**: [查看详细文档](https://docs.tabletop-assistant.com)
+
+## 📄 许可证
+
+本项目采用 MIT 许可证 - 查看 [LICENSE](LICENSE) 文件了解详情。
 
 ## 🙏 致谢
 
-- [React](https://reactjs.org/) - 前端框架
-- [TypeScript](https://www.typescriptlang.org/) - 类型系统
-- [Vite](https://vitejs.dev/) - 构建工具
-- [Cypress](https://www.cypress.io/) - 端到端测试
+感谢所有为这个项目做出贡献的开发者和用户！
+
+- React 团队提供的优秀前端框架
+- Vite 团队提供的现代化构建工具
+- 所有提供反馈和建议的用户
+
+## 🚀 未来计划
+
+### 短期目标 (3个月内)
+- [ ] 添加更多经典桌游模板
+- [ ] 优化AI算法性能
+- [ ] 完善移动端体验
+- [ ] 增加游戏统计功能
+
+### 中期目标 (6个月内)
+- [ ] 支持自定义模板导入
+- [ ] 添加在线多人游戏
+- [ ] 开发模板编辑器
+- [ ] 增加社区分享功能
+
+### 长期目标 (1年内)
+- [ ] 构建游戏模板商店
+- [ ] 支持AR/VR游戏体验
+- [ ] 机器学习增强AI
+- [ ] 国际化多语言支持
 
 ---
 
-**⭐ 如果这个项目对您有帮助，请给我们一个星标！**
-
-## 📞 联系方式
-
-- 邮箱：libin7099901@163.com
-- GitHub：[@libin7099901](https://github.com/libin7099901)
-
----
-
-## 🚀 版本历史
-
-### v1.0.0 (2024-05-24)
-- ✨ 初始版本发布
-- 🎮 基础游戏房间功能
-- 🎯 三种游戏模板
-- 🤖 演示模式和AI助手
-- 📱 响应式设计
-- 🧪 完整测试覆盖 
+**让桌游更有趣，让科技更贴心！** 🎲❤️ 

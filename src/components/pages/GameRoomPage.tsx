@@ -27,22 +27,20 @@ const GameRoomPage: React.FC<GameRoomPageProps> = ({
   onInvitePlayer,
   onBack
 }) => {
-  const [currentView, setCurrentView] = useState<RoomView>('lobby');
+  const [currentView, setCurrentView] = useState<RoomView>(room.status === 'playing' ? 'game' : 'lobby');
   const [showAIChat, setShowAIChat] = useState(false);
   const [copySuccess, setCopySuccess] = useState(false);
   
   const isHost = room.hostId === currentPlayer.id;
-  const canStart = room.gameTemplate && room.players.length >= (room.gameTemplate.minPlayers || 2);
+  const canStart = room.gameTemplate && room.players.length >= (room.gameTemplate.minPlayers || 1);
 
   useEffect(() => {
-    if (room.status === 'playing') {
+    if (room.status === 'playing' && currentView !== 'game') {
       setCurrentView('game');
-    } else if (room.gameTemplate) {
-      setCurrentView('lobby');
     }
-  }, [room.status, room.gameTemplate]);
+  }, [room.status, currentView]);
 
-  const handleTemplateSelect = (templateId: string) => {
+  const handleTemplateSelectInternal = (templateId: string) => {
     onSelectTemplate(templateId);
     setCurrentView('lobby');
   };
@@ -113,7 +111,7 @@ const GameRoomPage: React.FC<GameRoomPageProps> = ({
                 <div
                   key={template.id}
                   className={`template-card ${room.gameTemplate?.id === template.id ? 'template-card--selected' : ''}`}
-                  onClick={() => handleTemplateSelect(template.id)}
+                  onClick={() => handleTemplateSelectInternal(template.id)}
                   data-testid={`template-${template.id}`}
                 >
                   <div className="template-header">

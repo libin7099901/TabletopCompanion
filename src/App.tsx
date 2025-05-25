@@ -9,8 +9,46 @@ import GameStartPage from './components/pages/GameStartPage'
 import GameRoomPage from './components/pages/GameRoomPage'
 import { Player } from './types/common'
 import { StorageService } from './services/StorageService'
+import { DynamicGameLoader, ExtendedGameTemplate } from './services/DynamicGameLoader'
 
-type AppPage = 'home' | 'templates' | 'player-setup' | 'ai-settings' | 'game-start' | 'game-room'
+// === 类型定义 ===
+type AppPage = 'home' | 'template' | 'player-setup' | 'ai-settings' | 'game-start' | 'game-room'
+
+// === 类型转换工具 ===
+const convertToGameTemplate = (template: ExtendedGameTemplate) => {
+  // 组件类型映射：DynamicGameLoader类型 -> roomStore类型
+  const mapComponentType = (type: string): 'deck' | 'board' | 'piece' | 'dice' | 'token' => {
+    const typeMap: Record<string, 'deck' | 'board' | 'piece' | 'dice' | 'token'> = {
+      'cards': 'deck',
+      'board': 'board', 
+      'tokens': 'token',
+      'dice': 'dice',
+      'timer': 'token', // 计时器映射为token
+      'score': 'token', // 得分映射为token
+      'custom': 'token' // 自定义映射为token
+    };
+    return typeMap[type] || 'token';
+  };
+
+  return {
+    id: template.id,
+    name: template.name,
+    description: template.description,
+    type: 'custom' as const,
+    minPlayers: template.minPlayers,
+    maxPlayers: template.maxPlayers,
+    estimatedTime: template.estimatedTime,
+    difficulty: template.difficulty === 'beginner' ? 'easy' as const : 
+               template.difficulty === 'medium' ? 'medium' as const : 'hard' as const,
+    rules: template.rules.fullText,
+    components: template.components.map(comp => ({
+      id: comp.id,
+      type: mapComponentType(comp.type),
+      name: comp.name,
+      properties: comp.properties
+    }))
+  };
+};
 
 // 简化的房间状态（不使用Redux）
 interface SimpleRoom {
@@ -43,60 +81,42 @@ interface SimpleRoom {
   }
 }
 
-const defaultTemplates = [
-  {
-    id: 'poker',
-    name: '德州扑克',
-    description: '经典的扑克游戏，考验心理战术和运气',
-    type: 'card' as const,
-    minPlayers: 2,
-    maxPlayers: 8,
-    estimatedTime: 30,
-    difficulty: 'medium' as const,
-    rules: '使用标准52张扑克牌，每个玩家获得2张底牌...',
-    components: []
-  },
-  {
-    id: 'chess',
-    name: '国际象棋',
-    description: '策略性棋类游戏，锻炼逻辑思维',
-    type: 'board' as const,
-    minPlayers: 2,
-    maxPlayers: 2,
-    estimatedTime: 45,
-    difficulty: 'hard' as const,
-    rules: '8x8棋盘，每个玩家16个棋子...',
-    components: []
-  },
-  {
-    id: 'dice_guess',
-    name: '猜大小',
-    description: '经典的骰子赌博游戏，猜测骰子点数大小',
-    type: 'dice' as const,
-    minPlayers: 2,
-    maxPlayers: 6,
-    estimatedTime: 15,
-    difficulty: 'easy' as const,
-    rules: '使用3个骰子，猜测总点数大小(11-18为大，3-10为小)...',
-    components: []
-  }
-]
-
 function App() {
   const [currentPage, setCurrentPage] = useState<AppPage>('home')
   const [currentPlayer, setCurrentPlayer] = useState<Player | null>(null)
   const [currentRoom, setCurrentRoom] = useState<SimpleRoom | null>(null)
   const [loading, setLoading] = useState(false)
+  const [gameLoader] = useState(() => new DynamicGameLoader())
 
   useEffect(() => {
     loadPlayerData()
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    window.forceLoadPlayerForTest = loadPlayerData; // 暴露给Cypress
+
+    return () => {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      delete window.forceLoadPlayerForTest; // 清理
+    };
   }, [])
 
   const loadPlayerData = () => {
-    const storageService = StorageService.getInstance()
-    const savedPlayer = storageService.getPlayer() // 修正方法调用，不需要参数
+    console.log('[App.tsx] loadPlayerData called');
+    const storageService = StorageService.getInstance();
+    const savedPlayer = storageService.getPlayer(); // 这个方法会使用正确的键 'current_player'
+    console.log('[App.tsx] Parsed player data from storageService.getPlayer():', savedPlayer);
+
     if (savedPlayer) {
-      setCurrentPlayer(savedPlayer)
+      console.log('[App.tsx] Player found via StorageService, setting currentPlayer and data-player-loaded attribute.');
+      setCurrentPlayer(savedPlayer);
+      document.body.setAttribute('data-player-loaded', 'true'); 
+      console.log('[App.tsx] data-player-loaded attribute SET to true.');
+    } else {
+      console.log('[App.tsx] No player found via StorageService, clearing currentPlayer and data-player-loaded attribute.');
+      setCurrentPlayer(null); 
+      document.body.removeAttribute('data-player-loaded');
+      console.log('[App.tsx] data-player-loaded attribute REMOVED.');
     }
   }
 
@@ -235,18 +255,24 @@ function App() {
     }, 1000)
   }
 
+  // 模板选择处理
   const handleSelectTemplate = (templateId: string) => {
-    if (!currentRoom) return
-    
-    const template = defaultTemplates.find(t => t.id === templateId)
+    if (!currentRoom) return;
+    console.log(`[App.tsx] handleSelectTemplate called with ID: ${templateId}`); // 调试日志
+    const template = gameLoader.getTemplate(templateId);
+    console.log('[App.tsx] gameLoader.getTemplate result:', template); // 调试日志
     if (template) {
+      // 将ExtendedGameTemplate转换为SimpleRoom需要的格式
+      const gameTemplate = convertToGameTemplate(template);
+      console.log('[App.tsx] Converted gameTemplate for room:', gameTemplate); // 调试日志
       setCurrentRoom({
         ...currentRoom,
-        gameTemplate: template,
-        lastActivity: new Date().toISOString()
-      })
+        gameTemplate
+      });
+    } else {
+      console.error(`[App.tsx] Template not found with ID: ${templateId}`); // 调试日志
     }
-  }
+  };
 
   const handleStartGame = () => {
     if (!currentRoom) return
@@ -297,17 +323,20 @@ function App() {
         return (
           <HomePage
             currentPlayer={currentPlayer}
-            onManageTemplates={() => navigateTo('templates')}
+            onManageTemplates={() => navigateTo('template')}
             onPlayerSetup={handlePlayerSetup}
             onAISettings={() => navigateTo('ai-settings')}
             onStartGame={handleStartGameFlow}
           />
         )
 
-      case 'templates':
+      case 'template':
         return (
           <TemplateManagePage
             onBack={() => navigateTo('home')}
+            onSelectTemplate={(_templateId) => {
+              navigateTo('game-start')
+            }}
           />
         )
 
@@ -336,14 +365,24 @@ function App() {
             onDemoMode={handleDemoMode}
             onBack={() => navigateTo('home')}
           />
-        ) : null
+        ) : (
+          <HomePage 
+            currentPlayer={currentPlayer} 
+            onManageTemplates={() => navigateTo('template')} 
+            onPlayerSetup={handlePlayerSetup} 
+            onStartGame={handleStartGameFlow} 
+            onAISettings={() => navigateTo('ai-settings')}
+          />
+        )
 
       case 'game-room':
+        // 调试日志，查看传入GameRoomPage的模板数据
+        console.log('[App.tsx] Templates for GameRoomPage:', gameLoader.getAllTemplates().map(convertToGameTemplate));
         return currentRoom && currentPlayer ? (
           <GameRoomPage
             room={currentRoom}
             currentPlayer={currentPlayer}
-            templates={defaultTemplates}
+            templates={gameLoader.getAllTemplates().map(convertToGameTemplate)}
             onSelectTemplate={handleSelectTemplate}
             onStartGame={handleStartGame}
             onLeaveRoom={handleLeaveRoom}
@@ -356,9 +395,10 @@ function App() {
         return (
           <HomePage 
             currentPlayer={currentPlayer} 
-            onManageTemplates={() => navigateTo('templates')} 
+            onManageTemplates={() => navigateTo('template')} 
             onPlayerSetup={handlePlayerSetup} 
             onStartGame={handleStartGameFlow} 
+            onAISettings={() => navigateTo('ai-settings')}
           />
         )
     }
@@ -369,10 +409,16 @@ function App() {
       <Header 
         playerName={currentPlayer?.name}
         onPlayerClick={handlePlayerSetup}
-        currentPage={currentPage}
-        onNavigate={navigateTo}
+        currentPage={currentPage === 'template' ? 'templates' : currentPage}
+        onNavigate={(page) => {
+          if (page === 'templates') {
+            navigateTo('template')
+          } else {
+            navigateTo(page)
+          }
+        }}
       />
-      <main className="main-content">
+      <main className="main-content page-with-navbar">
         {renderCurrentPage()}
       </main>
     </div>
